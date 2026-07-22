@@ -1,0 +1,24 @@
+site:
+  domain: gpante.com
+  environment: production
+
+platform:
+  cms: WordPress
+  ecommerce: WooCommerce
+  theme_parent: WoodMart
+  theme_child: WoodMart Child
+
+seo:
+  plugins:
+    - Yoast SEO Premium
+    - Yoast WooCommerce SEO
+
+infrastructure:
+  panel: aaPanel
+  webserver: Nginx
+  database: MariaDB
+  php: PHP-FPM
+
+policy:
+  audit_first: true
+  production_write_without_approval: false
