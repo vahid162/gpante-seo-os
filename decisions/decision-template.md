@@ -1,6 +1,6 @@
 # Decision Template
 
-This is a Markdown contract, not a machine schema. Status values must come from `../workflows/status-definitions.md`.
+This is a Markdown contract, not a machine schema. Status values must come from `../workflows/status-definitions.md`. Evidence and Findings remain owned by Runs; Task status remains owned by `../tasks/backlog.md`.
 
 - decision_id:
 - title:
@@ -11,11 +11,17 @@ This is a Markdown contract, not a machine schema. Status values must come from 
 - evidence:
 - related_run:
 - related_findings:
+- alternatives_considered:
+- risk:
+- approved_option:
+- scope:
+- validation_requirement:
+- rollback_requirement:
+- approval:
+- related_tasks:
 - decision:
 - rationale:
-- alternatives_considered:
 - consequences:
-- related_tasks:
 - supersedes:
 - superseded_by:
 - limitations:
