@@ -1,0 +1,112 @@
+# Evidence Policy
+
+This policy is the canonical rule set for future evidence records and evidence references in `gpante-seo-os`.
+
+The repository lifecycle is:
+
+Evidence → Finding → Decision → Approved Task → Manual Change → Validation → Monitoring
+
+Evidence supports a claim, but it does not automatically prove a recommendation. Future records must keep these separate:
+
+- observed fact;
+- inference;
+- recommendation.
+
+No raw evidence is being added in this PR.
+
+## Evidence requirements
+
+Every future evidence item or evidence reference must include:
+
+- `evidence_id`;
+- `source_type`;
+- `collected_at`;
+- `scope`;
+- `classification`;
+- `sanitized`;
+- `storage`;
+- `related_run`;
+- `limitations`.
+
+Optional fields:
+
+- `observed_period`;
+- `checksum`;
+- `collector`;
+- `related_finding`;
+- `notes`.
+
+An identifier only needs to be unique within one run in this version. For example, `EV-001` is acceptable within a single run.
+
+This policy does not require a global evidence registry and does not create a JSON Schema or validator.
+
+## Allowed source types
+
+Illustrative source types relevant to this repository include:
+
+- `wordpress_admin`
+- `woocommerce_admin`
+- `yoast_admin`
+- `aapanel`
+- `server_readonly`
+- `browser_observation`
+- `search_console`
+- `analytics`
+- `crawler`
+- `manual_review`
+- `repository_history`
+- `external_document`
+
+Listing a source type does not grant access to that source. Access remains governed by repository rules, owner approval, and production safety constraints.
+
+## Evidence storage
+
+Evidence storage follows the classifications in [Data Policy](data-policy.md):
+
+- `repository-safe` evidence may be stored in Git;
+- `sanitization-required` evidence may be stored only after review and redaction;
+- `reference-only` evidence must remain outside Git;
+- `prohibited` evidence must never be stored or linked through access-granting URLs.
+
+Preferred repository evidence formats:
+
+- Markdown summaries;
+- YAML metadata;
+- small sanitized text excerpts.
+
+Discouraged repository evidence formats:
+
+- full screenshots;
+- large CSV files;
+- complete HTML exports;
+- full logs;
+- binary archives;
+- duplicated exports.
+
+## Evidence integrity
+
+Future contributors must maintain evidence integrity by following these rules:
+
+- do not fabricate observations;
+- do not add unsupported timestamps;
+- do not present altered evidence as original;
+- do not omit sanitization disclosure;
+- do not claim that a check was performed when it was not;
+- preserve relevant limitations;
+- distinguish source-derived content from interpretation.
+
+If evidence is incomplete, label it incomplete rather than filling gaps.
+
+## Screenshots
+
+Use screenshots only when visual state is necessary.
+
+Before committing a screenshot:
+
+- crop unrelated areas;
+- redact names, emails, IP addresses, usernames, paths, IDs, tokens, cookies, URLs containing secrets, and customer data;
+- remove browser account details;
+- verify hidden or blurred data cannot be recovered from the committed file;
+- prefer a written summary when the screenshot adds no unique evidence.
+
+Do not add screenshots in this PR.

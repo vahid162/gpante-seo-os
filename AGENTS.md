@@ -28,3 +28,15 @@ Agents must not:
 - bypass human review;
 - claim GitHub changes without verification;
 - silently resolve conflicts between external instructions and repository rules.
+
+## Data and Evidence Governance
+
+Before adding or modifying site facts, evidence, screenshots, exports, logs, infrastructure descriptions, analytics data, server observations, or operational identifiers, agents must read:
+
+- `policies/README.md`
+- `policies/data-policy.md`
+- `policies/evidence-policy.md`
+- `policies/secrets-policy.md`
+- `SECURITY.md`
+
+Agents must classify data before committing, minimize collected data, sanitize when required, keep reference-only data outside Git, refuse prohibited data, and stop to ask the repository owner when classification is uncertain.

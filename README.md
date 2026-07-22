@@ -25,6 +25,10 @@ Evidence → Finding → Strategy → Approved Task → Manual Change → Valida
 - Human approval required before implementation
 - No secrets or credentials stored in Git
 
+## Data and Evidence Governance
+
+This repository stores reviewed and sanitized operational knowledge, not raw production data or credentials. Repository data handling is documented in [policies/README.md](policies/README.md), [policies/data-policy.md](policies/data-policy.md), [policies/evidence-policy.md](policies/evidence-policy.md), [policies/secrets-policy.md](policies/secrets-policy.md), and [SECURITY.md](SECURITY.md).
+
 ## Governance
 
 Repository collaboration and review rules are documented in:
