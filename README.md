@@ -29,6 +29,14 @@ Evidence → Finding → Strategy → Approved Task → Manual Change → Valida
 
 This repository stores reviewed and sanitized operational knowledge, not raw production data or credentials. Repository data handling is documented in [policies/README.md](policies/README.md), [policies/data-policy.md](policies/data-policy.md), [policies/evidence-policy.md](policies/evidence-policy.md), [policies/secrets-policy.md](policies/secrets-policy.md), and [SECURITY.md](SECURITY.md).
 
+## Repository Architecture
+
+- [audits/](audits/README.md) defines reusable review structures.
+- [workflows/](workflows/README.md) defines lifecycle and process rules.
+- [runs/](runs/README.md) records concrete execution.
+- [decisions/](decisions/README.md) owns approved repository-wide Decisions.
+- [tasks/](tasks/README.md) owns approved cross-run implementation work and canonical Task status.
+
 ## Governance
 
 Repository collaboration and review rules are documented in:

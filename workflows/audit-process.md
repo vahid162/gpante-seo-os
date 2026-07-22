@@ -1,18 +1,14 @@
 # Audit Process
 
-## Flow
+Audits use reusable review structures from `../audits/` and are executed only through a concrete Run in `../runs/`.
 
-1. Intake
-2. Baseline
-3. Evidence collection
-4. Audit
-5. Findings
-6. Prioritization
-7. Roadmap
-8. Task definition
-9. Approval
-10. Validation
-11. Documentation
+## Alignment
+
+Follow the canonical Run lifecycle in `run-lifecycle.md` and status identifiers in `status-definitions.md`.
+
+Findings belong in the producing Run's `findings.md`. Repository-wide Decisions belong in `../decisions/`. Approved cross-run Task status belongs in `../tasks/backlog.md`.
+
+An audit does not automatically lead to implementation. Implementation requires approved canonical Tasks and explicit human approval.
 
 ## Audit principle
 

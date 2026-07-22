@@ -6,6 +6,23 @@ This changelog is inspired by Keep a Changelog and records meaningful repository
 
 ### Added
 
+- Directory ownership contracts for audits, workflows, runs, decisions, and tasks.
+- Reusable Run template and canonical Run naming guidance.
+- Run lifecycle and canonical lifecycle status definitions.
+- Decision record architecture with repository-wide identifiers and registry.
+- Task registry, Task template, and Task lifecycle guidance.
+
+### Changed
+
+- Renamed audit templates for WooCommerce and performance SEO naming consistency.
+- Converted the placeholder first-audit Run into a reusable Run template.
+
+### Removed
+
+- Duplicate global Finding ownership under `audits/findings/`; Findings are owned by the producing Run.
+
+### Added
+
 - Repository data classification policy for repository-safe, sanitization-required, reference-only, and prohibited data.
 - Evidence handling rules for future evidence metadata, storage boundaries, integrity, and screenshots.
 - Secret handling and accidental exposure response policy.
