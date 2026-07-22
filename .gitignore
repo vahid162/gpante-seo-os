@@ -1,0 +1,63 @@
+# .gitignore reduces accidental commits but does not make tracked or exposed data secure.
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_rsa.*
+wp-config.php
+auth.json
+service-account*.json
+credentials.json
+credentials.yaml
+credentials.yml
+secrets.json
+secrets.yaml
+secrets.yml
+*.credentials
+*.secret
+
+# Database dumps
+*.sql
+*.sql.gz
+*.dump
+*.dump.gz
+
+# Backups and archives
+*.bak
+*.backup
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.7z
+
+# Logs
+*.log
+
+# Raw or private working directories
+raw/
+**/raw/
+private/
+**/private/
+raw-exports/
+**/raw-exports/
+backups/
+**/backups/
+dumps/
+**/dumps/
+tmp/
+**/tmp/
+temp/
+**/temp/
+
+# Operating system and editor artifacts
+.DS_Store
+Thumbs.db
+*.swp
+*~
