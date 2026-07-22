@@ -11,6 +11,14 @@ This changelog is inspired by Keep a Changelog and records meaningful repository
 - Run lifecycle and canonical lifecycle status definitions.
 - Decision record architecture with repository-wide identifiers and registry.
 - Task registry, Task template, and Task lifecycle guidance.
+- Repository data classification policy for repository-safe, sanitization-required, reference-only, and prohibited data.
+- Evidence handling rules for future evidence metadata, storage boundaries, integrity, and screenshots.
+- Secret handling and accidental exposure response policy.
+- Preventive `.gitignore` rules for sensitive local artifacts, dumps, backups, logs, and private working directories.
+- README and AGENTS navigation updates for data and evidence governance.
+- Repository governance workflow for branches, commits, pull requests, reviews, merges, and cleanup.
+- Persian pull request template for human review.
+- README and agent navigation links for governance documents.
 
 ### Changed
 
@@ -20,17 +28,7 @@ This changelog is inspired by Keep a Changelog and records meaningful repository
 ### Removed
 
 - Duplicate global Finding ownership under `audits/findings/`; Findings are owned by the producing Run.
-
-### Added
-
-- Repository data classification policy for repository-safe, sanitization-required, reference-only, and prohibited data.
-- Evidence handling rules for future evidence metadata, storage boundaries, integrity, and screenshots.
-- Secret handling and accidental exposure response policy.
-- Preventive `.gitignore` rules for sensitive local artifacts, dumps, backups, logs, and private working directories.
-- README and AGENTS navigation updates for data and evidence governance.
-- Repository governance workflow for branches, commits, pull requests, reviews, merges, and cleanup.
-- Persian pull request template for human review.
-- README and agent navigation links for governance documents.
+- Previous placeholder Run structure under `runs/2026-07-first-audit/`.
 
 ## [0.1.1]
 
