@@ -7,7 +7,7 @@
 ## What belongs here
 
 - Reusable audit templates.
-- Domain-focused review structures under `audits/templates/`.
+- Domain-focused review structures under `audits/templates/`, including technical, ecommerce, content, authority, and measurement templates.
 - Template guidance describing what may be reviewed in a future Run.
 
 ## What does not belong here

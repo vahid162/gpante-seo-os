@@ -7,7 +7,7 @@
 ## What belongs here
 
 - Run lifecycle guidance.
-- Audit, decision, task, prioritization, validation, and rollback process documentation.
+- Audit, evidence intake, Finding triage, strategy approval, production change approval, decision, task, prioritization, validation, rollback, monthly reporting, content brief approval, and link opportunity approval process documentation.
 - Canonical status identifiers in `status-definitions.md`.
 
 ## What does not belong here
@@ -36,3 +36,16 @@ Follow repository governance and data policies before changing workflow guidance
 ## Production access
 
 This directory does not authorize WordPress, WooCommerce, Yoast, aaPanel, server, database, analytics, Search Console, or Production access.
+
+## Workflow Index
+
+- [Audit Process](audit-process.md)
+- [Evidence Intake and Sanitization](evidence-intake-sanitization.md)
+- [Finding Triage](finding-triage.md)
+- [Strategy Approval](strategy-approval.md)
+- [Production Change Approval](production-change-approval.md)
+- [Post-change Validation](post-change-validation.md)
+- [Incident and Rollback Handling](incident-rollback-handling.md)
+- [Monthly SEO Reporting](monthly-seo-reporting.md)
+- [Content Brief Approval](content-brief-approval.md)
+- [Link Opportunity Approval](link-opportunity-approval.md)

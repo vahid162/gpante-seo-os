@@ -6,6 +6,22 @@ This changelog is inspired by Keep a Changelog and records meaningful repository
 
 ### Added
 
+- SEO Operating System v1 foundation architecture for Technical SEO, WooCommerce/ecommerce SEO, Content, Authority, Measurement, Validation, and sanitized gpante.com site knowledge.
+- Domain-specific audit template folders for technical, ecommerce, content, authority, and measurement reviews.
+- Reusable validation and rollback checklist framework.
+- Workflow guidance for evidence intake, Finding triage, strategy approval, production change approval, incident rollback, monthly reporting, content brief approval, and link opportunity approval.
+
+### Changed
+
+- Expanded README architecture map and SEO rules for v1 governance while preserving the audit-first workflow.
+- Extended Run, Decision, and Task templates so future records can capture evidence, approval, validation, and rollback requirements.
+
+### Not included
+
+- No real SEO audit, production implementation, server access, WordPress change, analytics review, or Search Console action was performed.
+
+### Previous Unreleased Added
+
 - Directory ownership contracts for audits, workflows, runs, decisions, and tasks.
 - Reusable Run template and canonical Run naming guidance.
 - Run lifecycle and canonical lifecycle status definitions.
