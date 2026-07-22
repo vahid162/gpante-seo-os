@@ -40,3 +40,21 @@ Before adding or modifying site facts, evidence, screenshots, exports, logs, inf
 - `SECURITY.md`
 
 Agents must classify data before committing, minimize collected data, sanitize when required, keep reference-only data outside Git, refuse prohibited data, and stop to ask the repository owner when classification is uncertain.
+
+## Architecture Contracts
+
+Before modifying files under:
+
+- `audits/`
+- `workflows/`
+- `runs/`
+- `decisions/`
+- `tasks/`
+
+agents must read the corresponding directory README and:
+
+- preserve canonical ownership;
+- avoid duplicate records;
+- use canonical identifiers and statuses;
+- avoid treating templates as executed work;
+- stop if a requested change would create two sources of truth.

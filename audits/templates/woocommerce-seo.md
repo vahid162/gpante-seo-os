@@ -1,4 +1,4 @@
-# Ecommerce SEO Audit Template
+# WooCommerce SEO Audit Template
 
 ## Products
 ## Categories
