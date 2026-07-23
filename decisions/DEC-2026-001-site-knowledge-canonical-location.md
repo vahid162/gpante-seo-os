@@ -5,7 +5,7 @@
 - status: approved
 - date: 2026-07-22
 - owner: gpante-seo-os
-- context: After the SEO OS foundation architecture merge, both `site/` and `sites/gpante.com/` existed. This created a potential ambiguity about where future gpante.com-specific knowledge should be maintained.
+- context: After SEO OS v1 foundation merge, both `site/` and `sites/gpante.com/` existed. This created a potential ambiguity about where future gpante.com-specific knowledge should be maintained.
 - evidence: Repository architecture after PR #7 merge. `sites/gpante.com/README.md` defines ownership of sanitized site-specific operational knowledge. `site/architecture.md` is an initial legacy template.
 - related_run: none
 - related_findings: none

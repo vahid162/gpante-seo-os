@@ -1,6 +1,6 @@
 # Decision Index
 
-This file is the current repository-wide Decision registry for discoverability and is planned to become a derived/generated index in a future phase. Individual Decision records are the record-first source of truth for each Decision. Decision IDs use the `DEC-YYYY-NNN` format. `DEC-2026-999` is an example format only, not an assigned identifier.
+This file is the current manually maintained repository-wide Decision registry. It is planned to become a generated view only after a Schema, Validator, and Generator are implemented and merged in a later PR. Until then, this index must be maintained manually and must stay consistent with individual Decision records without creating a second conflicting source of truth. Decision IDs use the `DEC-YYYY-NNN` format. `DEC-2026-999` is an example format only, not an assigned identifier.
 
 | Decision ID | Title | Status | Related Run | Related Findings | Owner | Updated |
 | --- | --- | --- | --- | --- | --- | --- |
