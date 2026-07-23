@@ -38,7 +38,7 @@ SEO engagements should be oriented around the existing lifecycle:
 Evidence → Finding → Strategy or Decision → Approved Task → Manual Change → Validation → Documentation
 ```
 
-This is an orientation summary only. The relevant workflow files under `workflows/`, directory READMEs, `SEO-RULES.md`, and status definitions remain canonical and must not be duplicated or redefined here.
+This is an orientation summary only. The complete Run execution sequence is canonical only in `workflows/run-lifecycle.md`; the relevant workflow files under `workflows/`, directory READMEs, `SEO-RULES.md`, and status definitions remain canonical for their respective areas and must not be duplicated or redefined here.
 
 Each SEO engagement should answer:
 

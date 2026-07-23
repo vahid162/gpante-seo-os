@@ -80,7 +80,7 @@ Canonical Task status is owned by `tasks/backlog.md`.
 
 ## Validation statuses
 
-Validation belongs to the related Run or approved Task record.
+Validation status identifiers are defined only here; Validation write ownership is determined by `validation-process.md`. For an implemented approved Task, the individual canonical Task record owns detailed Validation and the related Run records only a summary/reference. For an audit-only or non-implementation Run with no implemented approved Task, the Run's `validation.md` may own verification for that Run only.
 
 | Status | Meaning | Who may transition it | Minimum transition requirements |
 | --- | --- | --- | --- |

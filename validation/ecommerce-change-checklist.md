@@ -23,4 +23,4 @@
 
 Include homepage, product, category, internal search where relevant, add to cart, cart, checkout, My Account, login, REST cart endpoint, WooCommerce AJAX, price, availability, product schema, and cache state.
 
-This checklist is reusable guidance. Concrete results belong in the related Run and/or Task.
+This checklist is reusable guidance and does not prove Validation occurred. For implemented approved Tasks, concrete detailed results belong in the individual canonical Task record and the related Run keeps only a summary/reference. For audit-only or non-implementation Runs with no implemented approved Task, the Run `validation.md` may own verification for that Run only.

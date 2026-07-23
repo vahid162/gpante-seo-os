@@ -6,9 +6,9 @@
 
 ## What belongs here
 
-- Run lifecycle guidance.
-- Audit, evidence intake, Finding triage, strategy approval, production change approval, decision, task, prioritization, validation, rollback, monthly reporting, content brief approval, and link opportunity approval process documentation.
+- The canonical end-to-end Run lifecycle sequence in `run-lifecycle.md`.
 - Canonical status identifiers in `status-definitions.md`.
+- Audit, evidence intake, Finding triage, prioritization, strategy approval, Decision, Task, production change approval, Validation, post-change Validation, rollback, incident/rollback handling, monthly reporting, content brief approval, and link opportunity approval process documentation.
 
 ## What does not belong here
 
@@ -39,13 +39,20 @@ This directory does not authorize WordPress, WooCommerce, Yoast, aaPanel, server
 
 ## Workflow Index
 
-- [Audit Process](audit-process.md)
-- [Evidence Intake and Sanitization](evidence-intake-sanitization.md)
-- [Finding Triage](finding-triage.md)
-- [Strategy Approval](strategy-approval.md)
-- [Production Change Approval](production-change-approval.md)
-- [Post-change Validation](post-change-validation.md)
-- [Incident and Rollback Handling](incident-rollback-handling.md)
-- [Monthly SEO Reporting](monthly-seo-reporting.md)
-- [Content Brief Approval](content-brief-approval.md)
-- [Link Opportunity Approval](link-opportunity-approval.md)
+- [Run Lifecycle](run-lifecycle.md) — canonical end-to-end Run execution sequence.
+- [Status Definitions](status-definitions.md) — only canonical lifecycle status identifiers.
+- [Audit Process](audit-process.md) — audit execution process routing.
+- [Evidence Intake and Sanitization](evidence-intake-sanitization.md) — Evidence classification and sanitization workflow.
+- [Finding Triage](finding-triage.md) — Finding evaluation and triage criteria.
+- [Prioritization](prioritization.md) — Run-local opportunity prioritization process.
+- [Strategy Approval](strategy-approval.md) — strategy approval requirements and Decision routing.
+- [Decision Process](decision-process.md) — canonical Decision workflow.
+- [Task Process](task-process.md) — canonical Task transitions and implementation-history routing.
+- [Production Change Approval](production-change-approval.md) — human approval requirements for Production changes.
+- [Validation Process](validation-process.md) — canonical Validation record ownership rules.
+- [Post-change Validation](post-change-validation.md) — post-change validation process and reusable-checklist routing.
+- [Rollback Process](rollback-process.md) — rollback process and status usage.
+- [Incident and Rollback Handling](incident-rollback-handling.md) — incident-triggered rollback handling requirements.
+- [Monthly SEO Reporting](monthly-seo-reporting.md) — monthly SEO reporting process.
+- [Content Brief Approval](content-brief-approval.md) — content brief approval process.
+- [Link Opportunity Approval](link-opportunity-approval.md) — link opportunity approval process.

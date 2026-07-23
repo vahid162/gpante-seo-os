@@ -41,4 +41,4 @@ Validation must compare expected and actual results and use Validation statuses 
 
 ## Implementation history
 
-The individual Task record should hold implementation history, validation details, monitoring notes, and rollback details. Run-local `tasks.md` files are candidate/reference lists and must not duplicate canonical lifecycle history.
+For an implemented approved Task, the individual canonical Task record owns implementation history, detailed Validation, monitoring notes where applicable, rollback decision, and rollback details. Run-local `tasks.md` files are candidate/reference lists, and related Run `validation.md` files must summarize/reference the Task Validation record instead of duplicating full lifecycle history.

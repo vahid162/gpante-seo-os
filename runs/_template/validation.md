@@ -1,6 +1,6 @@
 # Run Validation
 
-This file records validation for changes associated with this Run. Validation statuses must use `../../workflows/status-definitions.md`.
+For implemented approved Tasks, this file records only a Run-level summary and reference to the individual canonical Task Validation record. For audit-only or non-implementation Runs with no implemented approved Task, this file may own verification for this Run only. It must not imply that a Production change occurred. Validation statuses must use `../../workflows/status-definitions.md`.
 
 ## Validation Template
 

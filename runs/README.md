@@ -7,7 +7,7 @@
 ## What belongs here
 
 - One directory per real Run, named `YYYY-MM-DD-<short-kebab-case-slug>`.
-- Run-local scope, state, evidence references, Findings, roadmap notes, Task candidates, and Validation records.
+- Run-local scope, state, evidence references, Findings, roadmap notes, Task candidates, and Run-level Validation records.
 - The reusable `_template/` directory used to initialize future Runs.
 
 ## What does not belong here
@@ -21,6 +21,8 @@
 ## Canonical ownership
 
 A concrete Run owns the Evidence references and Findings produced or referenced during that Run. Evidence IDs use `EV-001` style identifiers that are unique within one Run. Finding IDs use `FND-001` style identifiers that are unique within one Run. These are examples of format only, not assigned identifiers.
+
+For implemented approved Tasks, the individual canonical Task record owns detailed Validation; the Run `validation.md` stores only a summary and reference to that Task Validation record. For audit-only or non-implementation Runs with no implemented approved Task, the Run `validation.md` may own audit verification, baseline verification, or other non-implementation validation for that Run only.
 
 ## Run naming
 
@@ -78,7 +80,7 @@ A Run may not be marked `completed` unless:
 - evidence limitations are recorded;
 - Findings are classified;
 - related Decisions and Tasks are referenced;
-- Validation status is documented where changes occurred;
+- Validation status is documented where changes occurred, with implemented Task details owned by the individual canonical Task record and Run-level summaries/references kept in `validation.md`;
 - unresolved items are explicitly recorded.
 
 ## Applicable policies
