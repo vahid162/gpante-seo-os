@@ -6,17 +6,16 @@ This guide defines the first engagement lifecycle for an AI SEO Lead beginning w
 
 This is a procedure guide. It does not represent completed SEO work, a completed audit, production validation, approved implementation, or evidence that any SEO result has occurred.
 
-## Phase 0: Repository orientation
+## Phase 0: Prerequisites
 
-Complete the startup sequence in [../AI-SEO-LEAD.md](../AI-SEO-LEAD.md) before creating or continuing SEO work.
+Before beginning this procedure:
 
-Confirm before proceeding:
+1. Read and comply with [../AGENTS.md](../AGENTS.md).
+2. Complete the applicable governance, data-handling, Evidence, security, and directory preflight required by `AGENTS.md`.
+3. Confirm that the repository owner has approved initialization of the first real SEO Run.
+4. Read the relevant Run and workflow contracts before creating the Run.
 
-- Facts, Inferences, and Recommendations will be separated.
-- Data classification and Evidence handling rules are understood.
-- `runs/_template/` is understood as a template only.
-- Production systems will not be modified.
-- Canonical ownership boundaries are understood.
+This document is a procedural guide. It cannot override `AGENTS.md`, Policies, Workflows, or directory ownership contracts. It is not evidence that an Audit, production change, validation, or SEO result has occurred.
 
 ## Phase 1: Create a baseline Run
 

@@ -2,13 +2,23 @@
 
 ## Purpose
 
-`onboarding/` owns procedure guides that help a new contributor or AI SEO Lead understand how to begin working in this repository.
+`onboarding/` owns explanatory procedure guides that help a new contributor or AI SEO Lead understand how to begin working in this repository.
 
-These documents explain how to orient, recover context, and start a properly scoped engagement. They do not own executed SEO work, Evidence, Findings, Decisions, canonical Task status, production implementation records, or validation results.
+These guides can explain orientation, context recovery, and properly scoped engagement setup. They do not own executed SEO work, Evidence, Findings, Decisions, canonical Task status, production implementation records, implementation history, or validation results.
+
+## Authority boundaries
+
+[../AGENTS.md](../AGENTS.md) is the mandatory entry point for AI agents. Onboarding guides are subordinate procedural documentation and cannot override:
+
+- [../AGENTS.md](../AGENTS.md);
+- root governance files such as [../SEO-RULES.md](../SEO-RULES.md), [../GITHUB-WORKFLOW.md](../GITHUB-WORKFLOW.md), and [../SECURITY.md](../SECURITY.md);
+- Policies in [../policies/](../policies/README.md);
+- Workflows in [../workflows/](../workflows/README.md);
+- directory ownership contracts in the corresponding directory README files.
 
 ## Ownership boundaries
 
-- Repository-wide governance remains owned by root governance files such as [../AGENTS.md](../AGENTS.md), [../SEO-RULES.md](../SEO-RULES.md), [../GITHUB-WORKFLOW.md](../GITHUB-WORKFLOW.md), and [../SECURITY.md](../SECURITY.md).
+- Repository-wide governance remains owned by root governance files.
 - Data, Evidence, and secrets rules remain owned by [../policies/](../policies/README.md).
 - Process rules remain owned by [../workflows/](../workflows/README.md).
 - Concrete execution records remain owned by [../runs/](../runs/README.md).
@@ -18,4 +28,4 @@ These documents explain how to orient, recover context, and start a properly sco
 
 ## Non-authority
 
-Onboarding documents are explanatory procedure guides. They must not be treated as completed audits, approved production work, evidence records, Findings, Decisions, Tasks, or implementation history.
+Onboarding documents are explanatory procedure guides. They must not be treated as completed audits, approved production work, evidence records, Findings, Decisions, Tasks, implementation history, validation results, or a second AI startup contract.
