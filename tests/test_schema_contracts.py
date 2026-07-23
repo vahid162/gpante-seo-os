@@ -36,10 +36,10 @@ def registry():
     return Registry().with_resources(resources)
 
 
-def validator(schema_name):
+def validator(schema_name, format_checker=FORMAT_CHECKER):
     schema = load_json(SCHEMAS / schema_name)
     Draft202012Validator.check_schema(schema)
-    return Draft202012Validator(schema, registry=registry(), format_checker=FORMAT_CHECKER)
+    return Draft202012Validator(schema, registry=registry(), format_checker=format_checker)
 
 
 class SchemaContractsTest(unittest.TestCase):
@@ -108,6 +108,30 @@ class SchemaContractsTest(unittest.TestCase):
         ]
         for schema_name, path in cases:
             self.assert_valid(schema_name, load_front_matter(path))
+
+    def test_date_templates_validate_with_and_without_format_checker(self):
+        cases = [
+            (
+                "decision.schema.json",
+                load_front_matter(ROOT / "decisions/decision-template.md"),
+                ["date"],
+            ),
+            (
+                "run-state.schema.json",
+                load_yaml(ROOT / "runs/_template/state.yaml"),
+                ["created_at", "updated_at"],
+            ),
+            (
+                "evidence.schema.json",
+                load_front_matter(ROOT / "runs/_template/evidence/_evidence-template.md"),
+                ["collected_at"],
+            ),
+        ]
+        for schema_name, instance, date_fields in cases:
+            for date_field in date_fields:
+                self.assertEqual("YYYY-MM-DD", instance[date_field])
+            validator(schema_name).validate(instance)
+            validator(schema_name, format_checker=None).validate(instance)
 
     def test_quoted_iso_date_fixture_validates(self):
         instance = load_yaml(ROOT / "tests/fixtures/schema/valid/quoted_iso_date_decision.yaml")

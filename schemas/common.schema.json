@@ -16,7 +16,10 @@
         },
         {
           "type": "string",
-          "format": "date"
+          "format": "date",
+          "not": {
+            "const": "YYYY-MM-DD"
+          }
         }
       ]
     },
