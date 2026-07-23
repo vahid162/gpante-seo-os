@@ -18,7 +18,7 @@ Proposed → Approved → Ready → In Progress → Validation Pending → Compl
 
 ## Approval requirements
 
-A Task cannot proceed beyond `proposed` without human approval recorded in the canonical Task record or registry. Approval does not authorize automatic implementation.
+A Task cannot proceed beyond `proposed` without human approval recorded in an individual canonical Task record. Approval metadata belongs to the individual Task record, not to `../tasks/backlog.md`. Approval does not authorize automatic implementation.
 
 ## Ready gate
 
@@ -41,4 +41,4 @@ Validation must compare expected and actual results and use Validation statuses 
 
 ## Implementation history
 
-For an implemented approved Task, the individual canonical Task record owns implementation history, detailed Validation, monitoring notes where applicable, rollback decision, and rollback details. Run-local `tasks.md` files are candidate/reference lists, and related Run `validation.md` files must summarize/reference the Task Validation record instead of duplicating full lifecycle history.
+For an approved Task, the individual canonical Task record owns approval metadata, implementation history, detailed Validation, monitoring notes where applicable, rollback decision, and rollback details. `../tasks/backlog.md` owns only canonical Task status and cross-run registry fields. Run-local `tasks.md` files are candidate/reference lists, and related Run `validation.md` files must summarize/reference the Task Validation record instead of duplicating full lifecycle history.
