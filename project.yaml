@@ -1,0 +1,15 @@
+schema_version: 1
+
+repository:
+  name: gpante-seo-os
+  version: 1.0.0-alpha.1
+
+maturity:
+  stage: foundation
+  first_real_run_started: false
+  production_operational: false
+
+agent_mode:
+  default_access: read_only
+  repository_write: pull_request_only
+  production_write: prohibited_by_default

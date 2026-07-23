@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`authority/` owns authority, backlinks, digital PR, outreach, and link-risk governance for the gpante SEO Operating System v1 foundation.
+`authority/` owns authority, backlinks, digital PR, outreach, and link-risk governance for the gpante SEO Operating System foundation.
 
 ## What belongs here
 

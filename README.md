@@ -1,8 +1,8 @@
 # gpante-seo-os
 
-`gpante-seo-os` یک سیستم فایل‌محور، `Audit-first` و `Production-safe` برای مدیریت SEO سایت `gpante.com` است. هدف این مخزن این است که تصمیم‌ها، شواهد، کارهای تأییدشده، اعتبارسنجی و مستندسازی SEO به‌شکل قابل‌ردیابی و قابل‌بازبینی نگهداری شوند، بدون اینکه خود مخزن مجوز دسترسی یا تغییر در Production ایجاد کند.
+`gpante-seo-os` یک سیستم فایل‌محور، `Audit-first`، `Record-first` و `Production-safe` برای مدیریت SEO سایت `gpante.com` است. هدف این مخزن این است که تصمیم‌ها، شواهد، کارهای تأییدشده، اعتبارسنجی و مستندسازی SEO به‌شکل قابل‌ردیابی و قابل‌بازبینی نگهداری شوند، بدون اینکه خود مخزن مجوز دسترسی یا تغییر در Production ایجاد کند.
 
-این مخزن برای تعریف چارچوب‌ها، فرآیندها، Runها، Decisionها، Taskها، Validation و دانش Sanitized مربوط به سایت استفاده می‌شود. وجود یک Template، Framework یا Checklist در اینجا به‌معنای انجام Audit، اجرای تغییر، Deployment، Validation یا کسب نتیجه SEO نیست.
+این مخزن برای تعریف چارچوب‌ها، فرآیندها، Runها، Decisionها، Taskها، Validation و دانش Sanitized مربوط به سایت استفاده می‌شود. نسخه، مرحله بلوغ و حالت دسترسی پیش‌فرض Agent در [`project.yaml`](project.yaml) به‌صورت Canonical نگهداری می‌شود. وجود یک Template، Framework یا Checklist در اینجا به‌معنای انجام Audit، اجرای تغییر، Deployment، Validation یا کسب نتیجه SEO نیست.
 
 ## خلاصه جهت‌یابی انسانی برای چرخه کار
 
@@ -11,6 +11,17 @@ Evidence → Finding → Strategy → Approved Task → Manual Change → Valida
 ```
 
 این زنجیره فقط یک خلاصه جهت‌یابی انسانی است و مالک اجرای canonical نیست. توالی کامل اجرای Run، شامل stageها، transitionها، stop conditionها و closure ruleها، فقط در [`workflows/run-lifecycle.md`](workflows/run-lifecycle.md) canonical است. README.md نمای کلی انسانی پروژه است و AI behavioral authority نیست.
+
+## وضعیت پروژه و معماری اعتبارسنجی آینده
+
+- منبع Canonical نسخه، مرحله بلوغ و حالت دسترسی Agent فایل [`project.yaml`](project.yaml) است.
+- پروژه در مرحله Foundation قرار دارد و اولین Run واقعی هنوز شروع نشده است.
+- Read-only بودن Agent یک Policy مستقل است، نه نتیجه شماره نسخه.
+- شماره Version به‌تنهایی هیچ مجوز Production ایجاد نمی‌کند. هر تغییر Production همچنان به Approved Task، تأیید انسانی، Validation و Rollback نیاز دارد.
+- معماری آینده Machine Validation به‌صورت Record-first تعریف شده است: Markdown فرمت اصلی انسان‌خوان باقی می‌ماند و Metadata رکوردها در YAML front matter قرار می‌گیرد.
+- هر رکورد مستقل Decision یا Task در آینده Source of Truth خودش خواهد بود؛ `decisions/index.md` و `tasks/backlog.md` برای تبدیل‌شدن به نمای Derived/Generated برنامه‌ریزی شده‌اند.
+- Evidence ID و Finding ID فقط داخل Run مربوط یکتا هستند و Global Evidence Registry ایجاد نمی‌شود.
+- Run state همچنان در `runs/<run-id>/state.yaml` نگهداری می‌شود.
 
 ## اجزای اصلی مخزن
 
@@ -29,6 +40,7 @@ Evidence → Finding → Strategy → Approved Task → Manual Change → Valida
 ### Governance و ایمنی
 
 - [AGENTS.md](AGENTS.md) — نقطه شروع و مرجع رفتاری اجباری برای عامل‌های هوش مصنوعی.
+- [project.yaml](project.yaml) — منبع Canonical نسخه، مرحله بلوغ و حالت دسترسی پیش‌فرض Agent.
 - [SEO-RULES.md](SEO-RULES.md) — اصول تصمیم‌گیری SEO و مرزهای ایمنی Production.
 - [GITHUB-WORKFLOW.md](GITHUB-WORKFLOW.md) — فرآیند Branch، Commit، Pull Request، Review، Merge و Cleanup.
 - [SECURITY.md](SECURITY.md) — قواعد مدیریت Exposure و Secret در Repository.

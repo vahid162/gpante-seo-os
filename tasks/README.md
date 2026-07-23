@@ -6,7 +6,7 @@
 
 ## What belongs here
 
-- `backlog.md`, the canonical cross-run Task registry.
+- `backlog.md`, the current canonical cross-run Task status registry and planned future generated Task backlog.
 - `task-template.md`, the Markdown contract for individual Task records.
 - Approved or tracked repository-wide Tasks that may span Runs.
 
@@ -21,7 +21,7 @@
 
 Task IDs are repository-wide and use `TSK-YYYY-NNN`, where `YYYY` is a four-digit year and `NNN` is a three-digit sequence. `TSK-2026-001` is an example format only, not an assigned identifier.
 
-`tasks/backlog.md` is the canonical cross-run Task registry and owns Task status. It does not own approval evidence and does not replace an individual Task record. Run-local `tasks.md` files are candidate/reference lists only.
+Current architecture: `tasks/backlog.md` remains the canonical owner of repository-wide Task status until a Schema, Validator, and Generator are implemented and merged in a later PR. Individual Task records remain the canonical owners of approval metadata, implementation history, detailed Validation, rollback details, and monitoring notes. Target architecture: after the future Generator is implemented and merged, individual Task records will own canonical Task status and `tasks/backlog.md` will become a generated view. These phases must not overlap in a way that creates two simultaneous sources of truth. Run-local `tasks.md` files are candidate/reference lists only.
 
 ## Individual Task record filename convention
 

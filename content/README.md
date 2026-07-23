@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`content/` owns content strategy, keyword intelligence, and internal linking frameworks for the gpante SEO Operating System v1 foundation.
+`content/` owns content strategy, keyword intelligence, and internal linking frameworks for the gpante SEO Operating System foundation.
 
 ## What belongs here
 

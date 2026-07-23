@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`technical-seo/` owns reusable technical SEO policies, URL models, and read-only playbooks for the gpante SEO Operating System v1 foundation.
+`technical-seo/` owns reusable technical SEO policies, URL models, and read-only playbooks for the gpante SEO Operating System foundation.
 
 ## What belongs here
 

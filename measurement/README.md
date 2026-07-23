@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`measurement/` owns KPI definitions, measurement guidance, and reporting templates for the gpante SEO Operating System v1 foundation.
+`measurement/` owns KPI definitions, measurement guidance, and reporting templates for the gpante SEO Operating System foundation.
 
 ## What belongs here
 
