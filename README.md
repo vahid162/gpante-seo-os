@@ -1,72 +1,85 @@
 # gpante-seo-os
 
-SEO Operating System v1 foundation for gpante.com.
+`gpante-seo-os` یک سیستم فایل‌محور، `Audit-first` و `Production-safe` برای مدیریت SEO سایت `gpante.com` است. هدف این مخزن این است که تصمیم‌ها، شواهد، کارهای تأییدشده، اعتبارسنجی و مستندسازی SEO به‌شکل قابل‌ردیابی و قابل‌بازبینی نگهداری شوند، بدون اینکه خود مخزن مجوز دسترسی یا تغییر در Production ایجاد کند.
 
-## v1.0 Purpose
+این مخزن برای تعریف چارچوب‌ها، فرآیندها، Runها، Decisionها، Taskها، Validation و دانش Sanitized مربوط به سایت استفاده می‌شود. وجود یک Template، Framework یا Checklist در اینجا به‌معنای انجام Audit، اجرای تغییر، Deployment، Validation یا کسب نتیجه SEO نیست.
 
-This repository is a file-based, audit-first SEO governance and growth framework for gpante.com. It is tailored to a WordPress, WooCommerce, WoodMart, Yoast SEO, Nginx, MariaDB, and PHP-FPM context while remaining repository-only and production-safe.
-
-It defines reusable operating contracts for technical SEO, ecommerce SEO, content strategy, authority development, measurement, validation, rollback, and sanitized site knowledge. It does not prove that a production audit, implementation, deployment, or analytics review has occurred.
-
-## Core Workflow
+## Workflow اصلی
 
 ```text
 Evidence → Finding → Strategy → Approved Task → Manual Change → Validation → Documentation
 ```
 
-This workflow remains canonical. Reusable frameworks can guide work, but concrete Evidence, Findings, validation results, and implementation records must be created through Runs and approved Tasks.
+این زنجیره نشان می‌دهد که کار SEO باید از Evidence شروع شود، به Finding و Strategy برسد، فقط پس از Approved Task به تغییر دستی منتهی شود، سپس Validation و Documentation انجام شود.
 
-## Repository Architecture Map
+## اجزای اصلی مخزن
 
-### Governance and safety
+- **Governance**: قوانین و مرزهای همکاری، امنیت، GitHub و رفتار Agentها را مشخص می‌کند.
+- **Audit definitions**: قالب‌ها و تعریف‌های قابل‌استفاده برای بررسی‌های آینده هستند؛ خودشان Audit انجام‌شده محسوب نمی‌شوند.
+- **Runs**: رکوردهای اجرای واقعی و محدوده‌دار هستند و Evidence reference، Findings، پیشنهادها و خلاصه Validation مربوط به همان اجرا را نگهداری می‌کنند.
+- **Decisions**: جهت‌گیری‌های پایدار و Repository-wide را ثبت می‌کنند.
+- **Tasks**: وضعیت Canonical کارهای تأییدشده و قابل‌پیگیری را نگهداری می‌کنند.
+- **Workflows**: نحوه پیشروی فرآیندها مثل Evidence intake، Finding triage، Task approval، Validation و Rollback را توضیح می‌دهند.
+- **Domain frameworks**: راهنماهای تخصصی قابل‌استفاده برای حوزه‌هایی مثل Technical SEO، Ecommerce SEO، Content، Authority و Measurement هستند.
+- **Validation**: Checklistها و الگوهای اعتبارسنجی را فراهم می‌کند؛ نتیجه واقعی Validation باید در Run یا Task مربوط ثبت شود.
+- **Site-specific knowledge**: دانش Sanitized و قابل‌نگهداری درباره `gpante.com` را در محل Canonical خودش ثبت می‌کند.
 
-- [AGENTS.md](AGENTS.md) — mandatory conduct and preflight rules for AI agents.
-- [SEO-RULES.md](SEO-RULES.md) — SEO decision-making and production safety principles.
-- [GITHUB-WORKFLOW.md](GITHUB-WORKFLOW.md) — branch, commit, pull request, review, merge, and cleanup workflow.
-- [SECURITY.md](SECURITY.md) — repository exposure and secret-handling rules.
-- [policies/](policies/README.md) — data classification, evidence handling, and secrets governance.
-- [.github/pull_request_template.md](.github/pull_request_template.md) — canonical Pull Request description structure.
-- [CHANGELOG.md](CHANGELOG.md) — human-readable repository milestones.
+## نقشه ساختار Repository
 
-### Canonical operating core
+### Governance و ایمنی
 
-- [audits/](audits/README.md) — reusable audit definitions and templates only.
-- [runs/](runs/README.md) — concrete Run execution records, Evidence references, Findings, Run-local recommendations, and Run validation summaries.
-- [decisions/](decisions/README.md) — repository-wide Decision records and Decision registry.
-- [tasks/](tasks/README.md) — approved cross-run Task registry and canonical Task status.
-- [workflows/](workflows/README.md) — lifecycle rules for audits, evidence, Findings, Decisions, Tasks, validation, rollback, reporting, content approval, and link approval.
+- [AGENTS.md](AGENTS.md) — نقطه شروع و مرجع رفتاری اجباری برای عامل‌های هوش مصنوعی.
+- [SEO-RULES.md](SEO-RULES.md) — اصول تصمیم‌گیری SEO و مرزهای ایمنی Production.
+- [GITHUB-WORKFLOW.md](GITHUB-WORKFLOW.md) — فرآیند Branch، Commit، Pull Request، Review، Merge و Cleanup.
+- [SECURITY.md](SECURITY.md) — قواعد مدیریت Exposure و Secret در Repository.
+- [policies/](policies/README.md) — Data classification، Evidence handling و Secrets governance.
+- [.github/pull_request_template.md](.github/pull_request_template.md) — ساختار Canonical توضیح Pull Request.
+- [CHANGELOG.md](CHANGELOG.md) — نقاط عطف قابل‌خواندن برای انسان.
 
-### Domain frameworks
+### هسته عملیاتی Canonical
 
-Domain directories contain reusable policies, playbooks, models, and guidance. They do not own executed Findings, actual validation results, raw evidence, or canonical Task status.
+- [audits/](audits/README.md) — تعریف‌ها و Templateهای Audit، نه رکورد اجرای واقعی.
+- [runs/](runs/README.md) — رکوردهای اجرای واقعی، Evidence reference، Findings، پیشنهادهای Run-local و خلاصه Validation.
+- [decisions/](decisions/README.md) — Decisionهای Repository-wide و Registry مربوط.
+- [tasks/](tasks/README.md) — Registry کارهای تأییدشده Cross-run و وضعیت Canonical Taskها.
+- [workflows/](workflows/README.md) — قواعد چرخه‌عمر Audit، Evidence، Finding، Decision، Task، Validation، Rollback، Reporting، Content approval و Link approval.
 
-- [technical-seo/](technical-seo/README.md) — URL classification, crawl/indexation, redirect/canonical, structured data, performance, and server-log analysis guidance.
-- [ecommerce-seo/](ecommerce-seo/README.md) — WooCommerce URL, product, category, faceted navigation, cart/checkout/account, cache/AJAX/REST, and product schema policies.
-- [content/](content/README.md) — keyword mapping, search intent, topic clusters, content briefs, quality, refresh, and internal linking frameworks.
-- [authority/](authority/README.md) — backlink governance, prospecting, competitor gap, outreach, digital PR, and link-risk frameworks.
-- [measurement/](measurement/README.md) — KPI dictionary, Search Console measurement, ecommerce SEO measurement, reporting, and change annotations.
-- [validation/](validation/README.md) — reusable validation and rollback checklists. Concrete validation results remain owned by the related Run and/or approved Task.
+### Frameworkهای تخصصی
 
-### Site-specific knowledge
+- [technical-seo/](technical-seo/README.md) — راهنمای URL classification، Crawl/Indexation، Redirect/Canonical، Structured data، Performance و Server-log analysis.
+- [ecommerce-seo/](ecommerce-seo/README.md) — سیاست‌های WooCommerce URL، Product، Category، Faceted navigation، Cart/Checkout/Account، Cache/AJAX/REST و Product schema.
+- [content/](content/README.md) — چارچوب Keyword mapping، Search intent، Topic clusters، Content briefs، Quality، Refresh و Internal linking.
+- [authority/](authority/README.md) — چارچوب Backlink governance، Prospecting، Competitor gap، Outreach، Digital PR و Link-risk.
+- [measurement/](measurement/README.md) — KPI dictionary، Search Console measurement، Ecommerce SEO measurement، Reporting و Change annotations.
+- [validation/](validation/README.md) — Checklistهای قابل‌استفاده برای Validation و Rollback.
 
-- [sites/gpante.com/](sites/gpante.com/README.md) — sanitized gpante.com operational knowledge model.
-- [site/](site/architecture.md) — legacy site notes retained for history; new scalable site-specific documentation belongs under `sites/gpante.com/` unless a future Decision supersedes this arrangement.
+### دانش اختصاصی سایت
 
-## Production Safety Boundaries
+- [sites/gpante.com/](sites/gpante.com/README.md) — مدل Sanitized دانش عملیاتی `gpante.com`.
+- [site/](site/architecture.md) — یادداشت‌های Legacy سایت که برای تاریخچه نگهداری شده‌اند؛ مستندات جدید و مقیاس‌پذیر سایت باید در `sites/gpante.com/` قرار بگیرند مگر اینکه Decision آینده این ترتیب را تغییر دهد.
 
-This repository does not authorize connecting to or changing production WordPress, WooCommerce, Yoast, aaPanel, Nginx, MariaDB, PHP-FPM, Search Console, Analytics, DNS, CDN, or external services. Production recommendations require evidence, a Decision when needed, an approved Task, validation expectations, rollback planning, and human approval.
+## مرزهای Production Safety
 
-## Data and Evidence Governance
+این مخزن به‌تنهایی مجوز اتصال، مشاهده یا تغییر در WordPress، WooCommerce، Yoast، aaPanel، Nginx، MariaDB، PHP-FPM، Search Console، Analytics، DNS، CDN یا سرویس‌های بیرونی را صادر نمی‌کند.
 
-The repository stores reviewed, sanitized, repository-safe documentation. It must not store credentials, API keys, cookies, personal data, customer information, raw database exports, raw server logs, private analytics exports, or unsanitized production evidence. Evidence rules are governed by [policies/evidence-policy.md](policies/evidence-policy.md), data classification by [policies/data-policy.md](policies/data-policy.md), and secret handling by [policies/secrets-policy.md](policies/secrets-policy.md).
+هر پیشنهاد Production باید بر Evidence، Decision در صورت نیاز، Approved Task، انتظار Validation، برنامه Rollback و تأیید انسانی متکی باشد. تغییرهای Production باید Manual و خارج از این مخزن انجام شوند، مگر اینکه مالک Repository مسیر دیگری را طبق قواعد Canonical تصویب کرده باشد.
 
-## Ownership Distinctions
+## Data، Evidence و Secretها
 
-- Governance defines rules and safety boundaries.
-- Audit definitions describe how future reviews should be performed.
-- Concrete Runs record actual scoped execution, Evidence references, Findings, recommendations, and validation summaries.
-- Decisions record approved repository-wide direction.
-- Tasks own approved implementation status and readiness.
-- Domain frameworks provide reusable SEO guidance, not executed work.
-- Validation templates describe checks; actual validation results remain with Runs and Tasks.
-- Site-specific knowledge records sanitized facts, historical facts, risks, open questions, and inferences about gpante.com.
+این Repository فقط باید مستندات Review‌شده، Sanitized و Repository-safe را نگهداری کند. Secret، Credential، Token، Cookie، اطلاعات مشتری، Raw Evidence، Database export، Backup، Raw log، Private analytics export و URLهای دسترسی‌دهنده نباید در Git ذخیره شوند.
+
+قواعد دقیق Data، Evidence و Secret در [policies/](policies/README.md) و قواعد Exposure در [SECURITY.md](SECURITY.md) نگهداری می‌شوند.
+
+## روش کلی استفاده انسان از Repository
+
+1. ابتدا هدف کار را مشخص کنید: بررسی، مستندسازی، Decision، Task، Validation یا به‌روزرسانی دانش سایت.
+2. فایل یا دایرکتوری Canonical مربوط را از نقشه بالا پیدا کنید.
+3. قبل از ثبت Fact یا Evidence، قواعد Data و Evidence را بررسی کنید.
+4. اگر کار به Production مربوط می‌شود، بدون Evidence، Approved Task، Validation plan، Rollback plan و تأیید انسانی آن را اجرا نکنید.
+5. اگر از Template یا Framework استفاده می‌کنید، خروجی واقعی را در Run، Decision یا Task مربوط ثبت کنید؛ خود Template را به‌عنوان کار انجام‌شده معرفی نکنید.
+
+## راهنمای عامل‌های هوش مصنوعی
+
+تمام عامل‌های هوش مصنوعی، ابزارهای کدنویسی و Agentهای خودکار باید پیش از هر بررسی یا تغییری، کار را از [AGENTS.md](AGENTS.md) آغاز کنند.
+
+این README برای معرفی انسانی پروژه است و مرجع رفتار، مجوز، اولویت Policy یا ترتیب اجرایی عامل‌های هوش مصنوعی محسوب نمی‌شود.
