@@ -1,10 +1,10 @@
 schema_version: 1
-record_type: task
+record_type: decision
 is_template: false
 decision_id: DEC-2026-003
-title: Invalid record type
+title: Invalid calendar date
+date: "2026-99-99"
 status: proposed
-date: "2026-07-23"
 owner: gpante-seo-os
 related_run: null
 related_findings: []

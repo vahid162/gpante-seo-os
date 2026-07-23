@@ -5,7 +5,7 @@ is_template: false
 decision_id: DEC-2026-001
 title: Define canonical site knowledge location for gpante.com
 status: approved
-date: 2026-07-22
+date: "2026-07-22"
 owner: gpante-seo-os
 related_run: null
 related_findings: []

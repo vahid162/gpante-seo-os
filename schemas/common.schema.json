@@ -9,12 +9,20 @@
       "const": 1
     },
     "iso_date": {
-      "type": "string",
-      "pattern": "^(YYYY-MM-DD|[0-9]{4}-[0-9]{2}-[0-9]{2})$"
+      "oneOf": [
+        {
+          "type": "string",
+          "const": "YYYY-MM-DD"
+        },
+        {
+          "type": "string",
+          "format": "date"
+        }
+      ]
     },
     "real_iso_date": {
       "type": "string",
-      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+      "format": "date"
     },
     "decision_id": {
       "type": "string",

@@ -5,7 +5,7 @@ is_template: false
 decision_id: DEC-2026-002
 title: Define record-first machine validation architecture
 status: approved
-date: 2026-07-23
+date: "2026-07-23"
 owner: gpante-seo-os
 related_run: null
 related_findings: []
@@ -76,7 +76,7 @@ A record-first design keeps repository history reviewable by humans while giving
 
 ## Amendment 2026-07-23: Phased Implementation Order
 
-This PR implements the first architecture phase by adding JSON Schemas and YAML front matter contracts before a repository-wide Validator, Generator, ownership transfer, or CI enforcement exists. This amendment clarifies the intended sequence:
+This amendment supersedes the implementation-order sentence in the earlier Decision narrative where it implied that YAML front matter would be stored only after Schema, Validator, and Generator were all implemented. The canonical phased order is now:
 
 ```text
 Schema and Front Matter
@@ -90,4 +90,4 @@ Current canonical ownership remains unchanged during this first phase: `tasks/ba
 
 ## Limitations
 
-This Decision does not create a schema, validator, GitHub Actions workflow, real Run, operational Task, Production access, or Production change.
+The earlier architecture PR did not create Schema files. This PR creates Schema and front matter contracts only. Repository-wide Validator tooling, Generator tooling, CI enforcement, real Runs, operational Tasks, Production access, and Production changes remain out of scope.

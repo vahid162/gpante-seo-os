@@ -16,5 +16,5 @@ approval:
 
 owner: OWNER_REQUIRED
 
-created_at: YYYY-MM-DD
-updated_at: YYYY-MM-DD
+created_at: "YYYY-MM-DD"
+updated_at: "YYYY-MM-DD"

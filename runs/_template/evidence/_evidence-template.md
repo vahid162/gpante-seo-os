@@ -5,7 +5,7 @@ is_template: true
 evidence_id: EV-NNN
 title: Evidence title required
 owner: OWNER_REQUIRED
-collected_at: YYYY-MM-DD
+collected_at: "YYYY-MM-DD"
 source_type: repository_document
 scope: Run-local evidence scope required
 classification: repository-safe

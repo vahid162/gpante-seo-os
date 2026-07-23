@@ -4,7 +4,7 @@ is_template: false
 decision_id: DEC-26-3
 title: Malformed ID
 status: proposed
-date: 2026-07-23
+date: "2026-07-23"
 owner: gpante-seo-os
 related_run: null
 related_findings: []

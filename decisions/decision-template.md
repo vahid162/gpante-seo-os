@@ -5,7 +5,7 @@ is_template: true
 decision_id: DEC-YYYY-NNN
 title: Decision title required
 status: proposed
-date: YYYY-MM-DD
+date: "YYYY-MM-DD"
 owner: OWNER_REQUIRED
 related_run: null
 related_findings: []
