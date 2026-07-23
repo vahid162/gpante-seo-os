@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "./evidence.schema.json",
   "title": "Evidence schema",
-  "description": "Validates Run-local Evidence YAML front matter. Evidence narrative remains in Markdown body.",
+  "description": "Validates Run-local Evidence YAML front matter. Evidence metadata follows policies/evidence-policy.md and policies/data-policy.md; narrative remains in Markdown body.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -11,15 +11,15 @@
     "is_template",
     "evidence_id",
     "title",
-    "status",
     "owner",
     "collected_at",
     "source_type",
+    "scope",
     "classification",
-    "sanitization_status",
+    "sanitized",
+    "storage",
     "related_run",
-    "related_findings",
-    "limitations"
+    "related_findings"
   ],
   "properties": {
     "schema_version": {
@@ -36,33 +36,32 @@
       "type": "string",
       "minLength": 1
     },
-    "status": {
-      "enum": [
-        "referenced",
-        "sanitized",
-        "excluded"
-      ]
-    },
     "owner": {},
     "collected_at": {},
     "source_type": {
       "type": "string"
     },
     "classification": {
-      "type": "string"
-    },
-    "sanitization_status": {
+      "type": "string",
       "enum": [
-        "not_required",
-        "sanitized",
-        "required",
+        "repository-safe",
+        "sanitization-required",
+        "reference-only",
         "prohibited"
       ]
     },
     "related_run": {},
     "related_findings": {},
-    "limitations": {
-      "type": "string"
+    "scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sanitized": {
+      "type": "boolean"
+    },
+    "storage": {
+      "type": "string",
+      "minLength": 1
     }
   },
   "allOf": [
@@ -89,10 +88,10 @@
           "owner": {
             "oneOf": [
               {
-                "$ref": "common.schema.json#/$defs/owner"
+                "$ref": "common.schema.json#/$defs/real_owner"
               },
               {
-                "$ref": "common.schema.json#/$defs/owner_template"
+                "$ref": "common.schema.json#/$defs/template_owner"
               }
             ]
           },
@@ -129,7 +128,7 @@
             "$ref": "common.schema.json#/$defs/evidence_id"
           },
           "owner": {
-            "$ref": "common.schema.json#/$defs/owner"
+            "$ref": "common.schema.json#/$defs/real_owner"
           },
           "collected_at": {
             "$ref": "common.schema.json#/$defs/real_iso_date"

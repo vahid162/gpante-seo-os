@@ -86,7 +86,7 @@
             "$ref": "common.schema.json#/$defs/run_id_template"
           },
           "owner": {
-            "$ref": "common.schema.json#/$defs/owner_template"
+            "$ref": "common.schema.json#/$defs/template_owner"
           },
           "created_at": {
             "$ref": "common.schema.json#/$defs/iso_date"
@@ -111,7 +111,7 @@
             "$ref": "common.schema.json#/$defs/run_id"
           },
           "owner": {
-            "$ref": "common.schema.json#/$defs/owner"
+            "$ref": "common.schema.json#/$defs/real_owner"
           },
           "created_at": {
             "$ref": "common.schema.json#/$defs/real_iso_date"

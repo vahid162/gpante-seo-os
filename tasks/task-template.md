@@ -15,18 +15,11 @@ approval:
   required: true
   status: pending
 risk: Medium
-preconditions: []
 implementation_mode: manual
-backup_preflight_requirement: ""
-backup_verification: ""
+backup_required: false
+backup_verified: false
 dependencies: []
-validation_plan: ""
-rollback_plan: ""
-implementation_record: ""
-completion_evidence: ""
 validation_result: pending
-monitoring: ""
-limitations: ""
 ---
 
 # Task Template

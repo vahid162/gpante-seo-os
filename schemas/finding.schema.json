@@ -81,10 +81,10 @@
           "owner": {
             "oneOf": [
               {
-                "$ref": "common.schema.json#/$defs/owner"
+                "$ref": "common.schema.json#/$defs/real_owner"
               },
               {
-                "$ref": "common.schema.json#/$defs/owner_template"
+                "$ref": "common.schema.json#/$defs/template_owner"
               }
             ]
           },
@@ -150,7 +150,7 @@
             "$ref": "common.schema.json#/$defs/finding_id"
           },
           "owner": {
-            "$ref": "common.schema.json#/$defs/owner"
+            "$ref": "common.schema.json#/$defs/real_owner"
           },
           "related_run": {
             "$ref": "common.schema.json#/$defs/run_id"

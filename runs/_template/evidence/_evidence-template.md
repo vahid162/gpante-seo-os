@@ -4,15 +4,15 @@ record_type: evidence
 is_template: true
 evidence_id: EV-NNN
 title: Evidence title required
-status: referenced
 owner: OWNER_REQUIRED
 collected_at: YYYY-MM-DD
 source_type: repository_document
-classification: repository_safe
-sanitization_status: not_required
+scope: Run-local evidence scope required
+classification: repository-safe
+sanitized: false
+storage: markdown_summary
 related_run: YYYY-MM-DD-short-slug
 related_findings: []
-limitations: ""
 ---
 
 # Evidence Template

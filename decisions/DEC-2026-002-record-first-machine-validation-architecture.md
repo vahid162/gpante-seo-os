@@ -74,6 +74,20 @@ A record-first design keeps repository history reviewable by humans while giving
 - No two sources of truth should exist at the same time: each phase must explicitly identify the current canonical owner before generated views are introduced.
 - Validation automation must be introduced incrementally in later architecture or tooling PRs.
 
+## Amendment 2026-07-23: Phased Implementation Order
+
+This PR implements the first architecture phase by adding JSON Schemas and YAML front matter contracts before a repository-wide Validator, Generator, ownership transfer, or CI enforcement exists. This amendment clarifies the intended sequence:
+
+```text
+Schema and Front Matter
+→ Validator
+→ Generator
+→ Canonical ownership transfer
+→ CI enforcement
+```
+
+Current canonical ownership remains unchanged during this first phase: `tasks/backlog.md` remains the canonical Task status owner, `decisions/index.md` remains manually maintained, Evidence and Finding IDs remain Run-local, and no generated registry is introduced.
+
 ## Limitations
 
 This Decision does not create a schema, validator, GitHub Actions workflow, real Run, operational Task, Production access, or Production change.

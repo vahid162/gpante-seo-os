@@ -2,7 +2,7 @@
 
 This directory owns portable JSON Schema Draft 2020-12 contracts for repository metadata and record YAML front matter.
 
-Markdown remains the primary human-readable format. YAML front matter stores only structured metadata needed for future validation. Long narrative fields such as context, rationale, implementation instructions, validation narrative, rollback details, and limitations belong in Markdown body sections.
+Markdown remains the primary human-readable format. YAML front matter stores only structured metadata needed for future validation. Long narrative fields such as context, rationale, collection context, preconditions narrative, implementation instructions, validation narrative, rollback narrative, implementation history, monitoring narrative, and limitations belong only in Markdown body sections.
 
 ## Scope
 

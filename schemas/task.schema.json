@@ -20,18 +20,11 @@
     "related_decisions",
     "approval",
     "risk",
-    "preconditions",
     "implementation_mode",
-    "backup_preflight_requirement",
-    "backup_verification",
     "dependencies",
-    "validation_plan",
-    "rollback_plan",
-    "implementation_record",
-    "completion_evidence",
     "validation_result",
-    "monitoring",
-    "limitations"
+    "backup_required",
+    "backup_verified"
   ],
   "properties": {
     "schema_version": {
@@ -81,12 +74,6 @@
     "risk": {
       "$ref": "common.schema.json#/$defs/risk"
     },
-    "preconditions": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
     "implementation_mode": {
       "enum": [
         "manual",
@@ -94,38 +81,20 @@
         "not_applicable"
       ]
     },
-    "backup_preflight_requirement": {
-      "type": "string"
-    },
-    "backup_verification": {
-      "type": "string"
-    },
     "dependencies": {
       "type": "array",
       "items": {
         "type": "string"
       }
     },
-    "validation_plan": {
-      "type": "string"
-    },
-    "rollback_plan": {
-      "type": "string"
-    },
-    "implementation_record": {
-      "type": "string"
-    },
-    "completion_evidence": {
-      "type": "string"
-    },
     "validation_result": {
       "$ref": "common.schema.json#/$defs/validation_status"
     },
-    "monitoring": {
-      "type": "string"
+    "backup_required": {
+      "type": "boolean"
     },
-    "limitations": {
-      "type": "string"
+    "backup_verified": {
+      "type": "boolean"
     }
   },
   "allOf": [
@@ -152,20 +121,20 @@
           "owner": {
             "oneOf": [
               {
-                "$ref": "common.schema.json#/$defs/owner"
+                "$ref": "common.schema.json#/$defs/real_owner"
               },
               {
-                "$ref": "common.schema.json#/$defs/owner_template"
+                "$ref": "common.schema.json#/$defs/template_owner"
               }
             ]
           },
           "implementation_owner": {
             "oneOf": [
               {
-                "$ref": "common.schema.json#/$defs/owner"
+                "$ref": "common.schema.json#/$defs/real_owner"
               },
               {
-                "$ref": "common.schema.json#/$defs/owner_template"
+                "$ref": "common.schema.json#/$defs/template_owner"
               }
             ]
           },
@@ -195,10 +164,10 @@
             "$ref": "common.schema.json#/$defs/task_id"
           },
           "owner": {
-            "$ref": "common.schema.json#/$defs/owner"
+            "$ref": "common.schema.json#/$defs/real_owner"
           },
           "implementation_owner": {
-            "$ref": "common.schema.json#/$defs/owner"
+            "$ref": "common.schema.json#/$defs/real_owner"
           },
           "related_run": {
             "$ref": "common.schema.json#/$defs/nullable_run_id"

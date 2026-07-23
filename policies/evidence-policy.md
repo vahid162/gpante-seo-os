@@ -35,12 +35,12 @@ Optional fields:
 - `observed_period`;
 - `checksum`;
 - `collector`;
-- `related_finding`;
+- `related_findings`;
 - `notes`.
 
 An identifier only needs to be unique within one run in this version. For example, `EV-001` is acceptable within a single run.
 
-This policy does not require a global evidence registry and does not create a JSON Schema or validator.
+This policy does not require a global evidence registry. JSON Schema contracts now exist in `../schemas/`, but this policy remains the canonical source for Evidence classification, storage, sanitization, and metadata requirements. A repository-wide validator is still out of scope for this phase.
 
 ## Allowed source types
 
@@ -115,6 +115,6 @@ Do not add screenshots in this PR.
 
 ## Record-first Evidence metadata
 
-Run-local Evidence records may use YAML front matter validated by `../schemas/evidence.schema.json`. The front matter is limited to structured metadata such as `schema_version`, `record_type`, `is_template`, Run-local Evidence ID, classification, sanitization status, owner, relationships, and dates. Evidence summaries, facts, collection context, and limitations remain in the Markdown body.
+Run-local Evidence records may use YAML front matter validated by `../schemas/evidence.schema.json`. The front matter is limited to structured metadata such as `schema_version`, `record_type`, `is_template`, Run-local Evidence ID, `scope`, `classification`, `sanitized`, `storage`, owner, relationships, and dates. Evidence summaries, facts, collection context, and limitations remain in the Markdown body.
 
 Evidence IDs remain unique only within the containing Run. This repository does not maintain a global Evidence registry.
