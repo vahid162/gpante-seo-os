@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "./finding.schema.json",
+  "title": "Finding schema",
+  "description": "Validates Run-local Finding YAML front matter. Finding status meanings are canonical in workflows/status-definitions.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_type",
+    "is_template",
+    "finding_id",
+    "title",
+    "status",
+    "owner",
+    "related_run",
+    "evidence",
+    "risk",
+    "confidence",
+    "related_decisions",
+    "related_tasks",
+    "supersedes",
+    "superseded_by"
+  ],
+  "properties": {
+    "schema_version": {
+      "$ref": "common.schema.json#/$defs/schema_version"
+    },
+    "record_type": {
+      "const": "finding"
+    },
+    "is_template": {
+      "type": "boolean"
+    },
+    "finding_id": {},
+    "title": {
+      "type": "string"
+    },
+    "status": {
+      "$ref": "common.schema.json#/$defs/finding_status"
+    },
+    "owner": {},
+    "related_run": {},
+    "evidence": {},
+    "risk": {
+      "$ref": "common.schema.json#/$defs/risk"
+    },
+    "confidence": {
+      "enum": [
+        "Low",
+        "Medium",
+        "High"
+      ]
+    },
+    "related_decisions": {},
+    "related_tasks": {},
+    "supersedes": {},
+    "superseded_by": {}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "is_template": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "finding_id": {
+            "oneOf": [
+              {
+                "$ref": "common.schema.json#/$defs/finding_id"
+              },
+              {
+                "$ref": "common.schema.json#/$defs/finding_id_template"
+              }
+            ]
+          },
+          "owner": {
+            "oneOf": [
+              {
+                "$ref": "common.schema.json#/$defs/owner"
+              },
+              {
+                "$ref": "common.schema.json#/$defs/owner_template"
+              }
+            ]
+          },
+          "related_run": {
+            "oneOf": [
+              {
+                "$ref": "common.schema.json#/$defs/run_id"
+              },
+              {
+                "$ref": "common.schema.json#/$defs/run_id_template"
+              }
+            ]
+          },
+          "evidence": {
+            "$ref": "common.schema.json#/$defs/evidence_id_array_template"
+          },
+          "related_decisions": {
+            "$ref": "common.schema.json#/$defs/decision_id_array_template"
+          },
+          "related_tasks": {
+            "$ref": "common.schema.json#/$defs/task_id_array_template"
+          },
+          "supersedes": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "common.schema.json#/$defs/finding_id"
+              },
+              {
+                "$ref": "common.schema.json#/$defs/finding_id_template"
+              }
+            ]
+          },
+          "superseded_by": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "common.schema.json#/$defs/finding_id"
+              },
+              {
+                "$ref": "common.schema.json#/$defs/finding_id_template"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "is_template": {
+            "const": false
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "finding_id": {
+            "$ref": "common.schema.json#/$defs/finding_id"
+          },
+          "owner": {
+            "$ref": "common.schema.json#/$defs/owner"
+          },
+          "related_run": {
+            "$ref": "common.schema.json#/$defs/run_id"
+          },
+          "evidence": {
+            "$ref": "common.schema.json#/$defs/evidence_id_array"
+          },
+          "related_decisions": {
+            "$ref": "common.schema.json#/$defs/decision_id_array"
+          },
+          "related_tasks": {
+            "$ref": "common.schema.json#/$defs/task_id_array"
+          },
+          "supersedes": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "common.schema.json#/$defs/finding_id"
+              }
+            ]
+          },
+          "superseded_by": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "common.schema.json#/$defs/finding_id"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+schema_version: 1
+record_type: finding
+is_template: true
+finding_id: FND-NNN
+title: Missing status
+owner: OWNER_REQUIRED
+related_run: YYYY-MM-DD-short-slug
+evidence: []
+risk: Medium
+confidence: Medium
+related_decisions: []
+related_tasks: []
+supersedes: null
+superseded_by: null

@@ -20,7 +20,7 @@
 
 ## Canonical ownership
 
-Audit templates define what may be reviewed. Concrete Findings are owned only by the Run that produced them and belong in `runs/<run-id>/findings.md`. This repository does not maintain a global Finding registry in this version.
+Audit templates define what may be reviewed. Concrete Findings are owned only by the Run that produced them and belong in `runs/<run-id>/findings/`. This repository does not maintain a global Finding registry in this version.
 
 ## Related directories
 

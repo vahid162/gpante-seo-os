@@ -18,10 +18,10 @@ Evidence → Finding → Strategy → Approved Task → Manual Change → Valida
 - پروژه در مرحله Foundation قرار دارد و اولین Run واقعی هنوز شروع نشده است.
 - Read-only بودن Agent یک Policy مستقل است، نه نتیجه شماره نسخه.
 - شماره Version به‌تنهایی هیچ مجوز Production ایجاد نمی‌کند. هر تغییر Production همچنان به Approved Task، تأیید انسانی، Validation و Rollback نیاز دارد.
-- معماری آینده Machine Validation به‌صورت Record-first تعریف شده است: Markdown فرمت اصلی انسان‌خوان باقی می‌ماند و Metadata رکوردها در YAML front matter قرار می‌گیرد.
-- هر رکورد مستقل Decision یا Task در آینده Source of Truth خودش خواهد بود؛ `decisions/index.md` و `tasks/backlog.md` برای تبدیل‌شدن به نمای Derived/Generated برنامه‌ریزی شده‌اند.
+- قراردادهای Machine-readable فعلی به‌صورت Record-first تعریف شده‌اند: Markdown فرمت اصلی انسان‌خوان باقی می‌ماند و Metadata رکوردها در YAML front matter قرار می‌گیرد.
+- در این مرحله `decisions/index.md` و `tasks/backlog.md` همچنان دستی هستند؛ تغییر مالکیت کامل Registryها و Generated کردن آن‌ها به PR آینده موکول شده است.
 - Evidence ID و Finding ID فقط داخل Run مربوط یکتا هستند و Global Evidence Registry ایجاد نمی‌شود.
-- Run state همچنان در `runs/<run-id>/state.yaml` نگهداری می‌شود.
+- Run state همچنان در `runs/<run-id>/state.yaml` نگهداری می‌شود. Schemaها در [`schemas/`](schemas/README.md) قرار دارند، اما Validator سراسری، Generator و CI هنوز وجود ندارند.
 
 ## اجزای اصلی مخزن
 

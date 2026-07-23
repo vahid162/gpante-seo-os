@@ -39,7 +39,7 @@ Workflow stage is recorded separately from Run status in `runs/<run-id>/state.ya
 
 ## Finding statuses
 
-Findings are owned by `runs/<run-id>/findings.md`.
+Findings are owned by record files inside `runs/<run-id>/findings/`.
 
 | Status | Meaning | Who may transition it | Minimum transition requirements |
 | --- | --- | --- | --- |

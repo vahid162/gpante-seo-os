@@ -6,6 +6,8 @@ This changelog is inspired by Keep a Changelog and records meaningful repository
 
 ### Added
 
+- Machine-readable JSON Schema Draft 2020-12 contracts for project metadata and record YAML front matter.
+- Record-first Run template layout with separate Run-local Evidence and Finding record templates.
 - Canonical `project.yaml` metadata for repository version, maturity stage, and default agent access mode.
 - Record-first Machine Validation architecture Decision that keeps Markdown human-readable while preparing future YAML front matter validation.
 - SEO Operating System foundation architecture for Technical SEO, WooCommerce/ecommerce SEO, Content, Authority, Measurement, Validation, and sanitized gpante.com site knowledge.
@@ -15,6 +17,7 @@ This changelog is inspired by Keep a Changelog and records meaningful repository
 
 ### Changed
 
+- Migrated Decision and Task templates, plus existing Decision records, to YAML front matter metadata while keeping narrative in Markdown body sections.
 - Expanded README architecture map and SEO rules for foundation governance while preserving the audit-first workflow.
 - Extended Run, Decision, and Task templates so future records can capture evidence, approval, validation, and rollback requirements.
 

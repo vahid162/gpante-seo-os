@@ -1,0 +1,13 @@
+schema_version: 1
+record_type: task
+is_template: false
+decision_id: DEC-2026-003
+title: Invalid record type
+status: proposed
+date: 2026-07-23
+owner: gpante-seo-os
+related_run: null
+related_findings: []
+related_tasks: []
+supersedes: null
+superseded_by: null

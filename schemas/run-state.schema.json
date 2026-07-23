@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "./run-state.schema.json",
+  "title": "Run State schema",
+  "description": "Validates runs/<run-id>/state.yaml metadata. Status meanings are canonical in workflows/status-definitions.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_type",
+    "is_template",
+    "run_id",
+    "status",
+    "workflow_stage",
+    "mode",
+    "approval",
+    "owner",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "$ref": "common.schema.json#/$defs/schema_version"
+    },
+    "record_type": {
+      "const": "run_state"
+    },
+    "is_template": {
+      "type": "boolean"
+    },
+    "run_id": {},
+    "status": {
+      "$ref": "common.schema.json#/$defs/run_status"
+    },
+    "workflow_stage": {
+      "$ref": "common.schema.json#/$defs/workflow_stage"
+    },
+    "mode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "audit_only",
+        "production_write"
+      ],
+      "properties": {
+        "audit_only": {
+          "type": "boolean"
+        },
+        "production_write": {
+          "type": "boolean"
+        }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required",
+        "status"
+      ],
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "status": {
+          "$ref": "common.schema.json#/$defs/approval_status"
+        }
+      }
+    },
+    "owner": {},
+    "created_at": {},
+    "updated_at": {}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "is_template": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "run_id": {
+            "$ref": "common.schema.json#/$defs/run_id_template"
+          },
+          "owner": {
+            "$ref": "common.schema.json#/$defs/owner_template"
+          },
+          "created_at": {
+            "$ref": "common.schema.json#/$defs/iso_date"
+          },
+          "updated_at": {
+            "$ref": "common.schema.json#/$defs/iso_date"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "is_template": {
+            "const": false
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "run_id": {
+            "$ref": "common.schema.json#/$defs/run_id"
+          },
+          "owner": {
+            "$ref": "common.schema.json#/$defs/owner"
+          },
+          "created_at": {
+            "$ref": "common.schema.json#/$defs/real_iso_date"
+          },
+          "updated_at": {
+            "$ref": "common.schema.json#/$defs/real_iso_date"
+          }
+        }
+      }
+    }
+  ]
+}

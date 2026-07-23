@@ -50,7 +50,7 @@ Evidence belongs in the active Run's `evidence/` area. Raw, reference-only, proh
 
 ## Phase 3: Create Findings
 
-Create Findings only inside the active Run's `findings.md` after Evidence exists.
+Create Findings only inside the active Run's `findings/` directory after Evidence exists.
 
 Each Finding should identify:
 

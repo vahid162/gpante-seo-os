@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "./evidence.schema.json",
+  "title": "Evidence schema",
+  "description": "Validates Run-local Evidence YAML front matter. Evidence narrative remains in Markdown body.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_type",
+    "is_template",
+    "evidence_id",
+    "title",
+    "status",
+    "owner",
+    "collected_at",
+    "source_type",
+    "classification",
+    "sanitization_status",
+    "related_run",
+    "related_findings",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {
+      "$ref": "common.schema.json#/$defs/schema_version"
+    },
+    "record_type": {
+      "const": "evidence"
+    },
+    "is_template": {
+      "type": "boolean"
+    },
+    "evidence_id": {},
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": [
+        "referenced",
+        "sanitized",
+        "excluded"
+      ]
+    },
+    "owner": {},
+    "collected_at": {},
+    "source_type": {
+      "type": "string"
+    },
+    "classification": {
+      "type": "string"
+    },
+    "sanitization_status": {
+      "enum": [
+        "not_required",
+        "sanitized",
+        "required",
+        "prohibited"
+      ]
+    },
+    "related_run": {},
+    "related_findings": {},
+    "limitations": {
+      "type": "string"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "is_template": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "evidence_id": {
+            "oneOf": [
+              {
+                "$ref": "common.schema.json#/$defs/evidence_id"
+              },
+              {
+                "$ref": "common.schema.json#/$defs/evidence_id_template"
+              }
+            ]
+          },
+          "owner": {
+            "oneOf": [
+              {
+                "$ref": "common.schema.json#/$defs/owner"
+              },
+              {
+                "$ref": "common.schema.json#/$defs/owner_template"
+              }
+            ]
+          },
+          "collected_at": {
+            "$ref": "common.schema.json#/$defs/iso_date"
+          },
+          "related_run": {
+            "oneOf": [
+              {
+                "$ref": "common.schema.json#/$defs/run_id"
+              },
+              {
+                "$ref": "common.schema.json#/$defs/run_id_template"
+              }
+            ]
+          },
+          "related_findings": {
+            "$ref": "common.schema.json#/$defs/finding_id_array_template"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "is_template": {
+            "const": false
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "evidence_id": {
+            "$ref": "common.schema.json#/$defs/evidence_id"
+          },
+          "owner": {
+            "$ref": "common.schema.json#/$defs/owner"
+          },
+          "collected_at": {
+            "$ref": "common.schema.json#/$defs/real_iso_date"
+          },
+          "related_run": {
+            "$ref": "common.schema.json#/$defs/run_id"
+          },
+          "related_findings": {
+            "$ref": "common.schema.json#/$defs/finding_id_array"
+          }
+        }
+      }
+    }
+  ]
+}
