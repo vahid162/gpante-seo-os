@@ -23,4 +23,4 @@
 
 Include crawl/indexation, canonical, redirect, sitemap, robots, structured data, performance, cache state, and error-log review where relevant.
 
-This checklist is reusable guidance. Concrete results belong in the related Run and/or Task.
+This checklist is reusable guidance and does not prove Validation occurred. For implemented approved Tasks, concrete detailed results belong in the individual canonical Task record and the related Run keeps only a summary/reference. For audit-only or non-implementation Runs with no implemented approved Task, the Run `validation.md` may own verification for that Run only.

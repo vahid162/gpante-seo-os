@@ -2,7 +2,11 @@
 
 Validate after every approved change.
 
-Validation belongs to the related approved Task record and may also be summarized in the related Run's `validation.md`. Use Validation statuses from `status-definitions.md`.
+Validation process and write ownership are defined here. Use Validation status identifiers from `status-definitions.md`; do not duplicate complete status definitions in this file.
+
+For an implemented approved Task, the individual canonical Task record owns the detailed Validation record. The related Run's `validation.md` records only a summary and reference to that canonical Task Validation record.
+
+For an audit-only or non-implementation Run with no implemented approved Task, the Run's `validation.md` may own audit verification, baseline verification, or other non-implementation validation for that Run only. It must not imply that a Production change occurred and must record limitations and `not_applicable` where appropriate.
 
 Required:
 

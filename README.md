@@ -4,13 +4,13 @@
 
 این مخزن برای تعریف چارچوب‌ها، فرآیندها، Runها، Decisionها، Taskها، Validation و دانش Sanitized مربوط به سایت استفاده می‌شود. وجود یک Template، Framework یا Checklist در اینجا به‌معنای انجام Audit، اجرای تغییر، Deployment، Validation یا کسب نتیجه SEO نیست.
 
-## Workflow اصلی
+## خلاصه جهت‌یابی انسانی برای چرخه کار
 
 ```text
 Evidence → Finding → Strategy → Approved Task → Manual Change → Validation → Documentation
 ```
 
-این زنجیره نشان می‌دهد که کار SEO باید از Evidence شروع شود، به Finding و Strategy برسد، فقط پس از Approved Task به تغییر دستی منتهی شود، سپس Validation و Documentation انجام شود.
+این زنجیره فقط یک خلاصه جهت‌یابی انسانی است و مالک اجرای canonical نیست. توالی کامل اجرای Run، شامل stageها، transitionها، stop conditionها و closure ruleها، فقط در [`workflows/run-lifecycle.md`](workflows/run-lifecycle.md) canonical است. README.md نمای کلی انسانی پروژه است و AI behavioral authority نیست.
 
 ## اجزای اصلی مخزن
 

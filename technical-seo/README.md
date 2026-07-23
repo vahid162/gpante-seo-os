@@ -19,7 +19,7 @@
 
 ## Canonical ownership
 
-This directory guides future work. Actual Evidence and Findings belong in `../runs/`; repository-wide Decisions belong in `../decisions/`; canonical Task status belongs in `../tasks/`; validation results for concrete execution belong to the related Run and/or Task.
+This directory guides future work. Actual Evidence and Findings belong in `../runs/`; repository-wide Decisions belong in `../decisions/`; canonical Task status belongs in `../tasks/backlog.md`. For implemented approved Tasks, detailed Validation is stored in the individual canonical Task record and the related Run keeps only a summary/reference. For audit-only or non-implementation Runs with no implemented approved Task, the Run's `validation.md` may own verification for that Run only.
 
 ## Production access
 

@@ -25,7 +25,7 @@ Task IDs are repository-wide and use `TSK-YYYY-NNN`, where `YYYY` is a four-digi
 
 ## Relationships
 
-Tasks may reference a related Run, run-local Finding IDs, repository-wide Decisions, approval records, implementation notes, Validation results, monitoring, and rollback records. Findings and Evidence remain owned by Runs. Decisions remain owned by `../decisions/`.
+Tasks may reference a related Run, run-local Finding IDs, repository-wide Decisions, approval records, implementation notes, Validation results, monitoring, and rollback records. For an implemented approved Task, the individual canonical Task record owns the detailed Validation record, including expected behavior, actual behavior, Evidence or limitations, Validation status, rollback decision, and monitoring details where applicable. Findings and Evidence remain owned by Runs. Decisions remain owned by `../decisions/`.
 
 ## Ready requirement
 

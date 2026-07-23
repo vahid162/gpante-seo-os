@@ -2,7 +2,9 @@
 
 This policy is the canonical rule set for future evidence records and evidence references in `gpante-seo-os`.
 
-The repository lifecycle is:
+Evidence participates early in the broader SEO work lifecycle by supporting Findings, Decisions, approved Tasks, Validation, and Monitoring, but this policy does not own the complete execution sequence. The canonical Run execution sequence, including detailed stages, transitions, stop conditions, and closure rules, is defined in `../workflows/run-lifecycle.md`.
+
+A simplified Evidence participation orientation is:
 
 Evidence → Finding → Decision → Approved Task → Manual Change → Validation → Monitoring
 
