@@ -1,0 +1,22 @@
+schema_version: 1
+record_type: task
+is_template: false
+task_id: TSK-2026-901
+title: Task with ambiguous Run-local Finding
+status: proposed
+priority: Medium
+owner: gpante-seo-os
+implementation_owner: gpante-seo-os
+related_run: null
+related_findings:
+  - FND-001
+related_decisions: []
+approval:
+  required: true
+  status: pending
+risk: Medium
+implementation_mode: manual
+dependencies: []
+validation_result: pending
+backup_required: false
+backup_verified: false

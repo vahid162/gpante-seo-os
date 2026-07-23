@@ -132,7 +132,25 @@
           "superseded_by": {
             "$ref": "common.schema.json#/$defs/nullable_decision_id"
           }
-        }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "related_findings": {
+                  "minItems": 1
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "related_run": {
+                  "$ref": "common.schema.json#/$defs/run_id"
+                }
+              }
+            }
+          }
+        ]
       }
     }
   ]

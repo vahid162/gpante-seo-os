@@ -114,6 +114,32 @@ class SchemaContractsTest(unittest.TestCase):
         self.assertIsInstance(instance["date"], str)
         self.assert_valid("decision.schema.json", instance)
 
+    def test_real_records_with_findings_require_related_run(self):
+        cases = [
+            ("decision.schema.json", "decision_findings_without_related_run.yaml"),
+            ("task.schema.json", "task_findings_without_related_run.yaml"),
+        ]
+        for schema_name, fixture in cases:
+            with self.assertRaises(exceptions.ValidationError) as ctx:
+                validator(schema_name).validate(
+                    load_yaml(ROOT / "tests/fixtures/schema/invalid" / fixture)
+                )
+            self.assertEqual(["related_run"], list(ctx.exception.absolute_path))
+            self.assertEqual("None is not of type 'string'", ctx.exception.message)
+
+    def test_real_records_with_findings_validate_with_related_run(self):
+        cases = [
+            ("decision.schema.json", "decision_findings_with_related_run.yaml"),
+            ("task.schema.json", "task_findings_with_related_run.yaml"),
+        ]
+        for schema_name, fixture in cases:
+            instance = load_yaml(ROOT / "tests/fixtures/schema/valid" / fixture)
+            self.assert_valid(schema_name, instance)
+
+            instance["related_run"] = None
+            instance["related_findings"] = []
+            self.assert_valid(schema_name, instance)
+
     def test_invalid_fixtures_fail_with_expected_causes(self):
         cases = [
             ("decision.schema.json", "invalid_record_type.yaml", "'decision' was expected"),
