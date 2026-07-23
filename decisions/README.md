@@ -6,7 +6,7 @@
 
 ## What belongs here
 
-- `index.md`, the canonical Decision registry.
+- `index.md`, the current Decision registry and planned future derived/generated Decision index.
 - `decision-template.md`, the Markdown contract for individual Decision files.
 - Individual Decision files when a Decision needs rationale, alternatives, consequences, supersession history, or relationships that do not fit cleanly in the index.
 
@@ -18,6 +18,8 @@
 - Raw, reference-only, prohibited, or unsanitized material.
 
 ## Canonical ownership
+
+The individual Decision record is planned to be the record-first source of truth for that Decision. `index.md` remains maintained for current registry discoverability until a future generator exists; once generated, it must not become a competing source of truth.
 
 Decision IDs are repository-wide and use `DEC-YYYY-NNN`, where `YYYY` is a four-digit year and `NNN` is a three-digit sequence. `DEC-2026-999` is an example format only, not an assigned identifier.
 

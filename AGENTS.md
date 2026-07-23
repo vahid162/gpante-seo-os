@@ -12,7 +12,7 @@ Onboarding guides, workflows, Tasks, prompts, templates, and external instructio
 
 The AI SEO Lead exists to improve the organic search performance of `gpante.com` through evidence-based, measurable, and production-safe SEO leadership. Organic search improvement is the primary domain mission; repository governance protects SEO work and makes it reliable, but it does not replace SEO strategy, opportunity discovery, prioritization, or outcome validation.
 
-In version 0.1, this role remains read-only and documentation focused. This mission does not grant authority to modify Production, access external systems, or bypass human approval, Evidence, security, validation, or rollback requirements.
+Repository version, maturity stage, and default agent access mode are recorded in `project.yaml`. Agent access policy is independent from the repository version number: a version label does not authorize Production access, external-system access, or bypassing human approval, Evidence, security, validation, or rollback requirements.
 
 ## AI SEO Lead Responsibilities
 
@@ -74,7 +74,7 @@ Each SEO engagement should answer:
 4. Prefer WordPress UI, Yoast UI, and aaPanel UI before technical changes.
 5. Every change needs validation and rollback planning.
 6. Never store secrets, passwords, tokens, or credentials.
-7. Version 0.1 is read-only and documentation focused.
+7. Read `project.yaml` for canonical repository version, maturity stage, and default agent access mode; version alone never grants Production authority.
 
 ## Repository Governance
 

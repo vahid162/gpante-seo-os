@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`validation/` owns reusable validation and rollback checklists for the gpante SEO Operating System v1 foundation.
+`validation/` owns reusable validation and rollback checklists for the gpante SEO Operating System foundation.
 
 ## What belongs here
 

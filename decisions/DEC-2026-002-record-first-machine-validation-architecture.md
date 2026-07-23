@@ -1,0 +1,33 @@
+# DEC-2026-002 Record-first Machine Validation Architecture
+
+- decision_id: DEC-2026-002
+- title: Define record-first machine validation architecture
+- status: approved
+- date: 2026-07-23
+- owner: gpante-seo-os
+- context: The repository needs a stable architecture for future machine validation without creating validators, JSON Schemas, GitHub Actions, real Runs, or operational Tasks in this PR. Version, maturity, and agent access mode also need separate canonical metadata so policy is not inferred from a version string.
+- evidence: Repository documentation review on 2026-07-23, including `AGENTS.md`, `README.md`, `SEO-RULES.md`, `GITHUB-WORKFLOW.md`, `SECURITY.md`, `policies/`, `workflows/README.md`, `runs/README.md`, `decisions/README.md`, `tasks/README.md`, `decisions/index.md`, `tasks/backlog.md`, `runs/_template/`, and `CHANGELOG.md`.
+- related_run: none
+- related_findings: none
+- alternatives_considered:
+  - Keep only human-readable Markdown without canonical metadata.
+  - Create a global Evidence or Finding registry.
+  - Add JSON Schema, a validator, and GitHub Actions in the same PR.
+  - Treat `tasks/backlog.md` and `decisions/index.md` as permanent canonical records instead of future derived views.
+- risk: Medium. Adding metadata architecture changes repository ownership expectations and could create duplicate sources of truth if future generated files are edited manually or if record metadata diverges from indexes.
+- approved_option: Use record-first, Markdown-primary files with YAML front matter metadata as the future machine-validation target, while keeping this PR documentation-only and architecture-only.
+- scope: Repository metadata, Decision architecture, Task architecture, Run-local Evidence and Finding identifiers, future derived indexes, and future validation automation planning.
+- validation_requirement: Confirm that `project.yaml` is the canonical version, maturity, and agent mode metadata file; confirm no real Run, operational Task, JSON Schema, validator, GitHub Actions workflow, or Production change is introduced; confirm changed links resolve; confirm repository-wide searches no longer find old hard-coded version governance text.
+- rollback_requirement: Revert this Decision and the related documentation changes in one git revert if the repository owner rejects record-first machine validation architecture. Because no Production or automation changes are introduced, rollback is documentation-only.
+- approval: Repository owner requested this architecture PR.
+- related_tasks: none
+- decision: The repository will use a record-first and machine-validatable architecture. Markdown remains the primary human-readable format. Record metadata will be stored in YAML front matter. Each individual Task record and individual Decision record is the source of truth for that record. `tasks/backlog.md` and `decisions/index.md` are planned to become derived/generated views in a future phase. Evidence IDs and Finding IDs remain unique only within their related Run. The repository will not create a global Evidence registry. Run state remains owned by `runs/<run-id>/state.yaml`. JSON Schema, validator tooling, and CI enforcement are deferred to later PRs.
+- rationale: A record-first design keeps repository history reviewable by humans while giving future tools a stable metadata surface to validate. Run-scoped Evidence and Finding IDs avoid unnecessary global registries and keep Evidence ownership close to the Run that produced or referenced it.
+- consequences:
+  - Future individual Decision and Task files should carry machine-readable YAML front matter before validators enforce it.
+  - Future generators may rebuild `decisions/index.md` and `tasks/backlog.md` from individual records, but this PR does not implement generation.
+  - Reviewers must avoid treating derived index files as competing sources of truth once generation is introduced.
+  - Validation automation must be introduced incrementally in later architecture or tooling PRs.
+- supersedes: none
+- superseded_by: none
+- limitations: This Decision does not create a schema, validator, GitHub Actions workflow, real Run, operational Task, Production access, or Production change.

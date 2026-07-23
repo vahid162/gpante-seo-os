@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`ecommerce-seo/` owns WooCommerce and ecommerce SEO policies and reusable playbooks for the gpante SEO Operating System v1 foundation.
+`ecommerce-seo/` owns WooCommerce and ecommerce SEO policies and reusable playbooks for the gpante SEO Operating System foundation.
 
 ## What belongs here
 
