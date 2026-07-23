@@ -23,6 +23,30 @@ Task IDs are repository-wide and use `TSK-YYYY-NNN`, where `YYYY` is a four-digi
 
 `tasks/backlog.md` is the canonical cross-run Task registry and owns Task status. It does not own approval evidence and does not replace an individual Task record. Run-local `tasks.md` files are candidate/reference lists only.
 
+## Task record filename convention
+
+Individual canonical Task records must be stored directly under `tasks/` using the following filename format:
+
+```text
+TSK-YYYY-NNN-short-kebab-case-title.md
+```
+
+Rules:
+
+- The filename prefix must match the assigned repository-wide `task_id`.
+- The title segment must use lowercase kebab-case.
+- The filename must remain stable after creation; title wording should not be changed only to rename the file.
+- The filename is a discoverability convention only; the `task_id` field inside the individual Task record remains the authoritative identifier.
+
+Examples:
+
+```text
+TSK-2026-001-fix-canonical-url-routing.md
+TSK-2026-002-improve-evidence-classification.md
+```
+
+Example identifiers are format examples only and are not assigned Tasks.
+
 ## Task promotion flow
 
 Run-local Task candidates may be drafted in a Run `tasks.md` file for reference and prioritization only. A candidate becomes an approved canonical Task only after an individual Task record is created from `task-template.md` and required human approval is recorded in that individual record. After promotion, `backlog.md` receives the repository-wide Task ID, canonical status, and cross-run registry fields, while the originating Run links to the canonical Task instead of duplicating lifecycle history.
