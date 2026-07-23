@@ -23,6 +23,34 @@ Task IDs are repository-wide and use `TSK-YYYY-NNN`, where `YYYY` is a four-digi
 
 `tasks/backlog.md` is the canonical cross-run Task registry and owns Task status. It does not own approval evidence and does not replace an individual Task record. Run-local `tasks.md` files are candidate/reference lists only.
 
+## Individual Task record filename convention
+
+Individual canonical Task records must use this filename format:
+
+```text
+TSK-YYYY-NNN-<short-kebab-case-title>.md
+```
+
+Example-format filenames:
+
+- `TSK-2026-001-fix-canonical-url-routing.md`
+- `TSK-2026-002-document-search-console-baseline.md`
+
+These examples show filename format only. They are not assigned Task IDs and are not real Task records.
+
+Filename rules:
+
+1. The filename must begin with the exact `task_id` stored inside the individual Task record.
+2. The suffix must be a short descriptive title written in lowercase kebab-case.
+3. The `.md` extension is required.
+4. The `task_id` inside the record remains the authoritative stable identifier.
+5. The descriptive filename suffix exists only for discoverability.
+6. Renaming the descriptive suffix must not create a new Task ID.
+7. An existing Task ID must not be reused for another Task.
+8. `tasks/backlog.md` must reference or link to the individual canonical Task record where practical.
+9. Filename convention must not transfer canonical Task status ownership away from `tasks/backlog.md`.
+10. Filename convention must not transfer approval or lifecycle-detail ownership away from the individual Task record.
+
 ## Task promotion flow
 
 Run-local Task candidates may be drafted in a Run `tasks.md` file for reference and prioritization only. A candidate becomes an approved canonical Task only after an individual Task record is created from `task-template.md` and required human approval is recorded in that individual record. After promotion, `backlog.md` receives the repository-wide Task ID, canonical status, and cross-run registry fields, while the originating Run links to the canonical Task instead of duplicating lifecycle history.
