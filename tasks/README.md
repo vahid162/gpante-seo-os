@@ -21,7 +21,13 @@
 
 Task IDs are repository-wide and use `TSK-YYYY-NNN`, where `YYYY` is a four-digit year and `NNN` is a three-digit sequence. `TSK-2026-001` is an example format only, not an assigned identifier.
 
-`tasks/backlog.md` is the canonical cross-run Task registry and owns Task status. Run-local `tasks.md` files are candidate/reference lists only.
+`tasks/backlog.md` is the canonical cross-run Task registry and owns Task status. It does not own approval evidence and does not replace an individual Task record. Run-local `tasks.md` files are candidate/reference lists only.
+
+## Task promotion flow
+
+Run-local Task candidates may be drafted in a Run `tasks.md` file for reference and prioritization only. A candidate becomes an approved canonical Task only after an individual Task record is created from `task-template.md` and required human approval is recorded in that individual record. After promotion, `backlog.md` receives the repository-wide Task ID, canonical status, and cross-run registry fields, while the originating Run links to the canonical Task instead of duplicating lifecycle history.
+
+The individual Task record owns approval metadata, implementation history, detailed Validation, rollback details, and monitoring notes. `backlog.md` owns canonical status and registry discoverability only.
 
 ## Relationships
 

@@ -1,6 +1,6 @@
 # Task Template
 
-This is a Markdown contract, not a machine schema. Status values must come from `../workflows/status-definitions.md`. Canonical Task status belongs in `backlog.md`; any `status` shown in an individual Task record is a non-canonical synchronized snapshot, and `backlog.md` wins if values differ. For an implemented approved Task, this individual Task record owns detailed Validation.
+This is a Markdown contract, not a machine schema. Status values must come from `../workflows/status-definitions.md`. Canonical Task status belongs in `backlog.md`; any `status` shown in an individual Task record is a non-canonical synchronized snapshot, and `backlog.md` wins if values differ. Approval metadata belongs in this individual Task record; `backlog.md` does not own approval evidence. For an approved Task, this individual Task record owns approval metadata, implementation history, detailed Validation, rollback details, and monitoring notes where applicable.
 
 - task_id:
 - title:
