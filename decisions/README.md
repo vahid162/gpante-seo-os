@@ -19,7 +19,7 @@
 
 ## Canonical ownership
 
-Decision IDs are repository-wide and use `DEC-YYYY-NNN`, where `YYYY` is a four-digit year and `NNN` is a three-digit sequence. `DEC-2026-001` is an example format only, not an assigned identifier.
+Decision IDs are repository-wide and use `DEC-YYYY-NNN`, where `YYYY` is a four-digit year and `NNN` is a three-digit sequence. `DEC-2026-999` is an example format only, not an assigned identifier.
 
 Decision statuses and lifecycle rules are defined in `../workflows/status-definitions.md` and `../workflows/decision-process.md`.
 

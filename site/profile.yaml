@@ -1,3 +1,6 @@
+# LEGACY REFERENCE ONLY
+# Canonical location: sites/gpante.com/
+# Do not update or treat this file as current Production truth.
 site:
   domain: gpante.com
   environment: production

@@ -30,16 +30,19 @@ It does not authorize:
 
 ## 3. Required Preflight
 
-Before editing, every agent must:
+This section is GitHub-change preflight only. It does not create an independent AI startup contract. `AGENTS.md` owns AI startup and document routing for agents.
 
-1. Read `README.md`.
-2. Read `AGENTS.md`.
-3. Read `SEO-RULES.md`.
-4. Read `GITHUB-WORKFLOW.md`.
-5. Read relevant local workflow or directory documentation.
-6. Inspect the latest `main` branch.
-7. Inspect existing files before creating replacements.
-8. Define:
+Before editing for a GitHub change, every agent must:
+
+1. Read and comply with `AGENTS.md` first; it is the canonical AI startup entry point.
+2. Follow `AGENTS.md` document routing for the requested task.
+3. Read `README.md` for human-facing project context, not behavioral authority.
+4. Read `SEO-RULES.md`.
+5. Read `GITHUB-WORKFLOW.md`.
+6. Read relevant local workflow or directory documentation.
+7. Inspect the latest `main` branch.
+8. Inspect existing files before creating replacements.
+9. Define:
    - objective;
    - included scope;
    - excluded scope;

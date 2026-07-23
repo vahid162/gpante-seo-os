@@ -1,6 +1,6 @@
-# DEC-001 Site Knowledge Canonical Location
+# DEC-2026-001 Site Knowledge Canonical Location
 
-- decision_id: DEC-001
+- decision_id: DEC-2026-001
 - title: Define canonical site knowledge location for gpante.com
 - status: approved
 - date: 2026-07-22
