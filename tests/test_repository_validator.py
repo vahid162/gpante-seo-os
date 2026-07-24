@@ -280,6 +280,28 @@ class RepositoryValidatorTest(unittest.TestCase):
         self.add_task(task_id="TSK-2026-123", filename="TSK-2026-123-Fix_Canonical.md")
         self.assertInvalidContains("lowercase-kebab-case-title")
 
+    def test_task_without_canonical_filename_is_discovered_and_fails(self):
+        self.add_task(filename="fix-canonical-routing.md")
+
+        result = self.result()
+
+        self.assertIn(
+            "tasks/fix-canonical-routing.md",
+            [record.relative_path for record in result.records],
+        )
+        self.assertNotEqual(0, result.exit_code)
+        errors = [
+            error
+            for error in result.errors
+            if error.path == "tasks/fix-canonical-routing.md"
+            and error.field == "filename"
+        ]
+        self.assertEqual(1, len(errors), format_result(result))
+        self.assertEqual(
+            "Real Task filename must use TSK-2026-123-<lowercase-kebab-case-title>.md.",
+            errors[0].message,
+        )
+
     def test_valid_front_matter_parses(self):
         self.add_run()
         self.assertEqual(0, self.result().exit_code, format_result(self.result()))
