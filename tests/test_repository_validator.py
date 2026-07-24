@@ -17,6 +17,15 @@ def front(data):
     return "---\n" + yaml.safe_dump(data, sort_keys=False) + "---\n\n# Body\n"
 
 
+def read_front(path):
+    text = path.read_text(encoding="utf-8")
+    return yaml.safe_load(text.split("---\n", 2)[1])
+
+
+def write_front(path, data):
+    path.write_text(front(data), encoding="utf-8")
+
+
 class RepositoryValidatorTest(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -33,12 +42,11 @@ class RepositoryValidatorTest(unittest.TestCase):
     def assertInvalidContains(self, fragment):
         result = self.result()
         self.assertNotEqual(0, result.exit_code)
-        rendered = format_result(result)
-        self.assertIn(fragment, rendered)
+        self.assertIn(fragment, format_result(result))
         return result
 
-    def count_records(self, result, record_type):
-        return sum(1 for record in result.records if record.record_type == record_type)
+    def records_in_run(self, result, run_id, record_type):
+        return [record for record in result.records if record.run_id == run_id and record.record_type == record_type]
 
     def add_run(self, run_id="2026-07-24-test-run", evidence_id="EV-001", finding_id="FND-001"):
         run = self.root / "runs" / run_id
@@ -47,37 +55,129 @@ class RepositoryValidatorTest(unittest.TestCase):
         (run / "evidence" / "README.md").write_text("# Evidence directory\n", encoding="utf-8")
         (run / "findings" / "README.md").write_text("# Findings directory\n", encoding="utf-8")
         (run / "state.yaml").write_text(yaml.safe_dump({
-            "schema_version": 1, "record_type": "run_state", "is_template": False, "run_id": run_id,
-            "status": "initialized", "workflow_stage": "intake", "mode": {"audit_only": True, "production_write": False},
-            "approval": {"required": True, "status": "pending"}, "owner": "repo-owner", "created_at": "2026-07-24", "updated_at": "2026-07-24",
+            "schema_version": 1,
+            "record_type": "run_state",
+            "is_template": False,
+            "run_id": run_id,
+            "status": "initialized",
+            "workflow_stage": "intake",
+            "mode": {"audit_only": True, "production_write": False},
+            "approval": {"required": True, "status": "pending"},
+            "owner": "repo-owner",
+            "created_at": "2026-07-24",
+            "updated_at": "2026-07-24",
         }, sort_keys=False), encoding="utf-8")
-        (run / "evidence" / "ev-001.md").write_text(front({
-            "schema_version": 1, "record_type": "evidence", "is_template": False, "evidence_id": evidence_id, "title": "Synthetic evidence", "owner": "repo-owner", "collected_at": "2026-07-24", "source_type": "repository_document", "scope": "Synthetic fixture", "classification": "repository-safe", "sanitized": False, "storage": "markdown_summary", "related_run": run_id, "related_findings": []}), encoding="utf-8")
-        (run / "findings" / "fnd-001.md").write_text(front({
-            "schema_version": 1, "record_type": "finding", "is_template": False, "finding_id": finding_id, "title": "Synthetic finding", "status": "confirmed", "owner": "repo-owner", "related_run": run_id, "evidence": [evidence_id], "severity": "Medium", "risk": "Medium", "confidence": "Medium", "related_decisions": [], "related_tasks": [], "supersedes": None, "superseded_by": None}), encoding="utf-8")
+        write_front(run / "evidence" / "ev-001.md", {
+            "schema_version": 1,
+            "record_type": "evidence",
+            "is_template": False,
+            "evidence_id": evidence_id,
+            "title": "Synthetic evidence",
+            "owner": "repo-owner",
+            "collected_at": "2026-07-24",
+            "source_type": "repository_document",
+            "scope": "Synthetic fixture",
+            "classification": "repository-safe",
+            "sanitized": False,
+            "storage": "markdown_summary",
+            "related_run": run_id,
+            "related_findings": [],
+        })
+        write_front(run / "findings" / "fnd-001.md", {
+            "schema_version": 1,
+            "record_type": "finding",
+            "is_template": False,
+            "finding_id": finding_id,
+            "title": "Synthetic finding",
+            "status": "confirmed",
+            "owner": "repo-owner",
+            "related_run": run_id,
+            "evidence": [evidence_id],
+            "severity": "Medium",
+            "risk": "Medium",
+            "confidence": "Medium",
+            "related_decisions": [],
+            "related_tasks": [],
+            "supersedes": None,
+            "superseded_by": None,
+        })
         return run
 
-    def snapshot(self):
-        snap = {}
-        for path in sorted(p for p in self.root.rglob("*") if p.is_file()):
-            rel = path.relative_to(self.root).as_posix()
-            snap[rel] = hashlib.sha256(path.read_bytes()).hexdigest()
-        return snap
+    def add_task(self, task_id="TSK-2026-123", filename="TSK-2026-123-fix-canonical-routing.md"):
+        path = self.root / "tasks" / filename
+        write_front(path, {
+            "schema_version": 1,
+            "record_type": "task",
+            "is_template": False,
+            "task_id": task_id,
+            "title": "Synthetic task",
+            "status": "proposed",
+            "priority": "Medium",
+            "owner": "repo-owner",
+            "implementation_owner": "repo-owner",
+            "related_run": None,
+            "related_findings": [],
+            "related_decisions": [],
+            "approval": {"required": True, "status": "pending"},
+            "risk": "Medium",
+            "implementation_mode": "manual",
+            "dependencies": [],
+            "validation_result": "pending",
+            "backup_required": False,
+            "backup_verified": False,
+        })
+        return path
 
+    def snapshot(self):
+        return {
+            path.relative_to(self.root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+            for path in sorted(item for item in self.root.rglob("*") if item.is_file())
+        }
+
+    def test_current_repository_validates(self):
+        result = validate_repository(ROOT)
+        self.assertEqual([], result.sorted_errors, format_result(result))
+        self.assertEqual(0, result.exit_code)
 
     def test_real_run_evidence_readme_is_ignored(self):
-        self.add_run()
+        run = self.add_run()
         result = self.result()
         self.assertEqual(0, result.exit_code, format_result(result))
-        self.assertEqual(2, self.count_records(result, "evidence"))
-        self.assertNotIn("runs/2026-07-24-test-run/evidence/README.md", [record.relative_path for record in result.records])
+        records = self.records_in_run(result, run.name, "evidence")
+        self.assertEqual(["runs/2026-07-24-test-run/evidence/ev-001.md"], [record.relative_path for record in records])
 
     def test_real_run_findings_readme_is_ignored(self):
-        self.add_run()
+        run = self.add_run()
         result = self.result()
         self.assertEqual(0, result.exit_code, format_result(result))
-        self.assertEqual(2, self.count_records(result, "finding"))
-        self.assertNotIn("runs/2026-07-24-test-run/findings/README.md", [record.relative_path for record in result.records])
+        records = self.records_in_run(result, run.name, "finding")
+        self.assertEqual(["runs/2026-07-24-test-run/findings/fnd-001.md"], [record.relative_path for record in records])
+
+    def test_known_evidence_template_filename_inside_real_run_is_ignored(self):
+        run = self.add_run()
+        (run / "evidence" / "_evidence-template.md").write_text("# Not a record\n", encoding="utf-8")
+        result = self.result()
+        self.assertEqual(0, result.exit_code, format_result(result))
+        self.assertEqual(1, len(self.records_in_run(result, run.name, "evidence")))
+
+    def test_known_finding_template_filename_inside_real_run_is_ignored(self):
+        run = self.add_run()
+        (run / "findings" / "_finding-template.md").write_text("# Not a record\n", encoding="utf-8")
+        result = self.result()
+        self.assertEqual(0, result.exit_code, format_result(result))
+        self.assertEqual(1, len(self.records_in_run(result, run.name, "finding")))
+
+    def test_finding_template_filename_under_evidence_is_not_silently_ignored(self):
+        run = self.add_run()
+        (run / "evidence" / "_finding-template.md").write_text("# Misplaced\n", encoding="utf-8")
+        result = self.assertInvalidContains("_finding-template.md")
+        self.assertEqual(1, result.exit_code)
+
+    def test_evidence_template_filename_under_findings_is_not_silently_ignored(self):
+        run = self.add_run()
+        (run / "findings" / "_evidence-template.md").write_text("# Misplaced\n", encoding="utf-8")
+        result = self.assertInvalidContains("_evidence-template.md")
+        self.assertEqual(1, result.exit_code)
 
     def test_missing_project_yaml_fails_as_configuration_error(self):
         (self.root / "project.yaml").unlink()
@@ -104,38 +204,94 @@ class RepositoryValidatorTest(unittest.TestCase):
         self.assertEqual(1, result.exit_code)
         self.assertTrue(any(error.category == "record" and error.path == "runs/2026-07-24-test-run/state.yaml" for error in result.errors))
 
-    def test_evidence_related_run_mismatch_fails(self):
-        run = self.add_run("2026-07-24-test-one")
-        p = run / "evidence" / "ev-001.md"
-        p.write_text(p.read_text(encoding="utf-8").replace("related_run: 2026-07-24-test-one", "related_run: 2026-07-25-test-two"), encoding="utf-8")
-        result = self.assertInvalidContains("Expected '2026-07-24-test-one', found '2026-07-25-test-two'")
-        self.assertTrue(any(error.category == "semantic" and error.field == "related_run" for error in result.errors))
+    def test_path_record_type_mismatch_fails(self):
+        cases = [
+            (self.root / "decisions" / "DEC-2026-001-site-knowledge-canonical-location.md", "task", "decision"),
+            (self.add_task(), "decision", "task"),
+            (self.add_run() / "evidence" / "ev-001.md", "finding", "evidence"),
+            (self.root / "runs" / "2026-07-24-test-run" / "findings" / "fnd-001.md", "evidence", "finding"),
+            (self.root / "tasks" / "task-template.md", "decision", "task"),
+        ]
+        for path, actual, expected in cases:
+            data = read_front(path)
+            data["record_type"] = actual
+            write_front(path, data)
+            result = self.result()
+            self.assertTrue(any(error.category == "semantic" and error.field == "record_type" and expected in error.message and actual in error.message for error in result.errors), format_result(result))
+            data["record_type"] = expected
+            write_front(path, data)
 
-    def test_finding_related_run_mismatch_fails(self):
-        run = self.add_run("2026-07-24-test-one")
-        p = run / "findings" / "fnd-001.md"
-        p.write_text(p.read_text(encoding="utf-8").replace("related_run: 2026-07-24-test-one", "related_run: 2026-07-25-test-two"), encoding="utf-8")
-        result = self.assertInvalidContains("Expected '2026-07-24-test-one', found '2026-07-25-test-two'")
-        self.assertTrue(any(error.category == "semantic" and error.field == "related_run" for error in result.errors))
+    def test_real_paths_cannot_masquerade_as_templates(self):
+        self.add_run()
+        self.add_task()
+        paths = [
+            self.root / "runs" / "2026-07-24-test-run" / "state.yaml",
+            self.root / "decisions" / "DEC-2026-001-site-knowledge-canonical-location.md",
+            self.root / "tasks" / "TSK-2026-123-fix-canonical-routing.md",
+            self.root / "runs" / "2026-07-24-test-run" / "evidence" / "ev-001.md",
+            self.root / "runs" / "2026-07-24-test-run" / "findings" / "fnd-001.md",
+        ]
+        for path in paths:
+            if path.suffix == ".yaml":
+                data = yaml.safe_load(path.read_text(encoding="utf-8"))
+                data["is_template"] = True
+                path.write_text(yaml.safe_dump(data, sort_keys=False), encoding="utf-8")
+            else:
+                data = read_front(path)
+                data["is_template"] = True
+                write_front(path, data)
+        result = self.assertInvalidContains("is_template must match canonical path")
+        self.assertEqual(1, result.exit_code)
 
-    def test_known_evidence_template_filename_inside_real_run_is_ignored(self):
-        run = self.add_run()
-        (run / "evidence" / "_evidence-template.md").write_text("# Misplaced template name without front matter\n", encoding="utf-8")
-        result = self.result()
-        self.assertEqual(0, result.exit_code, format_result(result))
-        self.assertEqual(2, self.count_records(result, "evidence"))
+    def test_template_paths_must_remain_templates(self):
+        paths = [
+            self.root / "runs" / "_template" / "state.yaml",
+            self.root / "decisions" / "decision-template.md",
+            self.root / "tasks" / "task-template.md",
+            self.root / "runs" / "_template" / "evidence" / "_evidence-template.md",
+            self.root / "runs" / "_template" / "findings" / "_finding-template.md",
+        ]
+        for path in paths:
+            if path.suffix == ".yaml":
+                data = yaml.safe_load(path.read_text(encoding="utf-8"))
+                data["is_template"] = False
+                path.write_text(yaml.safe_dump(data, sort_keys=False), encoding="utf-8")
+            else:
+                data = read_front(path)
+                data["is_template"] = False
+                write_front(path, data)
+        result = self.assertInvalidContains("Expected True, found False")
+        self.assertEqual(1, result.exit_code)
 
-    def test_known_finding_template_filename_inside_real_run_is_ignored(self):
-        run = self.add_run()
-        (run / "findings" / "_finding-template.md").write_text("# Misplaced template name without front matter\n", encoding="utf-8")
-        result = self.result()
-        self.assertEqual(0, result.exit_code, format_result(result))
-        self.assertEqual(2, self.count_records(result, "finding"))
+    def test_task_filename_and_task_id_agree_is_valid(self):
+        self.add_task()
+        self.assertEqual(0, self.result().exit_code, format_result(self.result()))
 
-    def test_current_repository_validates(self):
-        result = validate_repository(ROOT)
-        self.assertEqual([], result.sorted_errors, format_result(result))
-        self.assertEqual(0, result.exit_code)
+    def test_task_filename_with_another_task_id_fails(self):
+        self.add_task(task_id="TSK-2026-123", filename="TSK-2026-124-fix-canonical-routing.md")
+        self.assertInvalidContains("Real Task filename must use TSK-2026-123-")
+
+    def test_task_filename_without_descriptive_suffix_fails(self):
+        self.add_task(task_id="TSK-2026-123", filename="TSK-2026-123.md")
+        self.assertInvalidContains("lowercase-kebab-case-title")
+
+    def test_task_filename_suffix_must_be_lowercase_kebab_case(self):
+        self.add_task(task_id="TSK-2026-123", filename="TSK-2026-123-Fix_Canonical.md")
+        self.assertInvalidContains("lowercase-kebab-case-title")
+
+    def test_valid_front_matter_parses(self):
+        self.add_run()
+        self.assertEqual(0, self.result().exit_code, format_result(self.result()))
+
+    def test_missing_exact_closing_front_matter_delimiter_fails(self):
+        path = self.root / "decisions" / "DEC-2026-999-no-close.md"
+        path.write_text("---\nrecord_type: decision\nis_template: false\n# no closing delimiter\n", encoding="utf-8")
+        self.assertInvalidContains("missing closing YAML front matter delimiter")
+
+    def test_non_delimiter_line_does_not_close_front_matter(self):
+        path = self.root / "decisions" / "DEC-2026-999-bad-close.md"
+        path.write_text("---\nrecord_type: decision\n---not-a-delimiter\n# Body\n", encoding="utf-8")
+        self.assertInvalidContains("missing closing YAML front matter delimiter")
 
     def test_invalid_json_schema_fails(self):
         (self.root / "schemas" / "bad.schema.json").write_text('{"$schema": "https://json-schema.org/draft/2020-12/schema", "type": 7}', encoding="utf-8")
@@ -159,7 +315,8 @@ class RepositoryValidatorTest(unittest.TestCase):
         self.assertInvalidContains("Evidence ID must be unique within its Run")
 
     def test_same_evidence_id_in_different_runs_allowed(self):
-        self.add_run("2026-07-24-test-one"); self.add_run("2026-07-25-test-two")
+        self.add_run("2026-07-24-test-one")
+        self.add_run("2026-07-25-test-two")
         self.assertEqual(0, self.result().exit_code, format_result(self.result()))
 
     def test_duplicate_finding_id_in_same_run_fails(self):
@@ -168,47 +325,105 @@ class RepositoryValidatorTest(unittest.TestCase):
         self.assertInvalidContains("Finding ID must be unique within its Run")
 
     def test_same_finding_id_in_different_runs_allowed(self):
-        self.add_run("2026-07-24-test-one"); self.add_run("2026-07-25-test-two")
+        self.add_run("2026-07-24-test-one")
+        self.add_run("2026-07-25-test-two")
         self.assertEqual(0, self.result().exit_code, format_result(self.result()))
 
     def test_missing_finding_evidence_fails(self):
-        run = self.add_run(); p = run / "findings" / "fnd-001.md"; text = p.read_text(encoding="utf-8").replace("EV-001", "EV-999"); p.write_text(text, encoding="utf-8")
+        run = self.add_run()
+        path = run / "findings" / "fnd-001.md"
+        path.write_text(path.read_text(encoding="utf-8").replace("EV-001", "EV-999"), encoding="utf-8")
         self.assertInvalidContains("Finding evidence reference must resolve within the same Run")
 
     def test_finding_cannot_resolve_evidence_from_other_run(self):
-        run = self.add_run("2026-07-24-test-one", "EV-002"); self.add_run("2026-07-25-test-two", "EV-001")
-        p = run / "findings" / "fnd-001.md"; p.write_text(p.read_text(encoding="utf-8").replace("EV-002", "EV-001"), encoding="utf-8")
+        run = self.add_run("2026-07-24-test-one", "EV-002")
+        self.add_run("2026-07-25-test-two", "EV-001")
+        path = run / "findings" / "fnd-001.md"
+        path.write_text(path.read_text(encoding="utf-8").replace("EV-002", "EV-001"), encoding="utf-8")
         self.assertInvalidContains("same Run")
 
+    def test_evidence_related_run_mismatch_fails(self):
+        run = self.add_run("2026-07-24-test-one")
+        path = run / "evidence" / "ev-001.md"
+        path.write_text(path.read_text(encoding="utf-8").replace("related_run: 2026-07-24-test-one", "related_run: 2026-07-25-test-two"), encoding="utf-8")
+        result = self.assertInvalidContains("Expected '2026-07-24-test-one', found '2026-07-25-test-two'")
+        self.assertTrue(any(error.category == "semantic" and error.field == "related_run" for error in result.errors))
+
+    def test_finding_related_run_mismatch_fails(self):
+        run = self.add_run("2026-07-24-test-one")
+        path = run / "findings" / "fnd-001.md"
+        path.write_text(path.read_text(encoding="utf-8").replace("related_run: 2026-07-24-test-one", "related_run: 2026-07-25-test-two"), encoding="utf-8")
+        result = self.assertInvalidContains("Expected '2026-07-24-test-one', found '2026-07-25-test-two'")
+        self.assertTrue(any(error.category == "semantic" and error.field == "related_run" for error in result.errors))
+
     def test_related_findings_without_related_run_fails(self):
-        (self.root / "tasks" / "TSK-2026-999-related.md").write_text(front({"schema_version":1,"record_type":"task","is_template":False,"task_id":"TSK-2026-999","title":"Task","status":"proposed","priority":"Medium","owner":"repo-owner","implementation_owner":"repo-owner","related_run":None,"related_findings":["FND-001"],"related_decisions":[],"approval":{"required":True,"status":"pending"},"risk":"Medium","implementation_mode":"manual","dependencies":[],"validation_result":"pending","backup_required":False,"backup_verified":False}), encoding="utf-8")
+        self.add_task(task_id="TSK-2026-999", filename="TSK-2026-999-related.md")
+        path = self.root / "tasks" / "TSK-2026-999-related.md"
+        data = read_front(path)
+        data["related_findings"] = ["FND-001"]
+        write_front(path, data)
         self.assertInvalidContains("related_findings requires related_run")
 
     def test_missing_related_finding_fails(self):
         self.add_run()
-        (self.root / "decisions" / "DEC-2026-999-related.md").write_text(front({"schema_version":1,"record_type":"decision","is_template":False,"decision_id":"DEC-2026-999","title":"Decision","status":"proposed","date":"2026-07-24","owner":"repo-owner","related_run":"2026-07-24-test-run","related_findings":["FND-999"],"related_tasks":[],"supersedes":None,"superseded_by":None}), encoding="utf-8")
+        write_front(self.root / "decisions" / "DEC-2026-999-related.md", {
+            "schema_version": 1,
+            "record_type": "decision",
+            "is_template": False,
+            "decision_id": "DEC-2026-999",
+            "title": "Decision",
+            "status": "proposed",
+            "date": "2026-07-24",
+            "owner": "repo-owner",
+            "related_run": "2026-07-24-test-run",
+            "related_findings": ["FND-999"],
+            "related_tasks": [],
+            "supersedes": None,
+            "superseded_by": None,
+        })
         self.assertInvalidContains("related_finding must resolve inside related_run")
 
     def test_run_id_mismatch_fails(self):
-        run = self.add_run(); data = yaml.safe_load((run / "state.yaml").read_text(encoding="utf-8")); data["run_id"] = "2026-07-24-other"; (run / "state.yaml").write_text(yaml.safe_dump(data, sort_keys=False), encoding="utf-8")
+        run = self.add_run()
+        data = yaml.safe_load((run / "state.yaml").read_text(encoding="utf-8"))
+        data["run_id"] = "2026-07-24-other"
+        (run / "state.yaml").write_text(yaml.safe_dump(data, sort_keys=False), encoding="utf-8")
         self.assertInvalidContains("run_id must match")
 
     def test_self_reference_fails(self):
-        (self.root / "decisions" / "DEC-2026-999-self.md").write_text(front({"schema_version":1,"record_type":"decision","is_template":False,"decision_id":"DEC-2026-999","title":"Decision","status":"proposed","date":"2026-07-24","owner":"repo-owner","related_run":None,"related_findings":[],"related_tasks":[],"supersedes":"DEC-2026-999","superseded_by":None}), encoding="utf-8")
+        write_front(self.root / "decisions" / "DEC-2026-999-self.md", {
+            "schema_version": 1,
+            "record_type": "decision",
+            "is_template": False,
+            "decision_id": "DEC-2026-999",
+            "title": "Decision",
+            "status": "proposed",
+            "date": "2026-07-24",
+            "owner": "repo-owner",
+            "related_run": None,
+            "related_findings": [],
+            "related_tasks": [],
+            "supersedes": "DEC-2026-999",
+            "superseded_by": None,
+        })
         self.assertInvalidContains("must not directly reference itself")
 
     def test_templates_remain_valid(self):
         result = self.result()
-        template_errors = [e for e in result.sorted_errors if "template" in e.path]
+        template_errors = [error for error in result.sorted_errors if "template" in error.path]
         self.assertEqual([], template_errors)
 
     def test_error_order_and_summary_are_deterministic(self):
-        self.add_run(); (self.root / "decisions" / "DEC-2026-999-no-front-matter.md").write_text("# bad\n", encoding="utf-8")
-        first = format_result(self.result()); second = format_result(self.result())
+        self.add_run()
+        (self.root / "decisions" / "DEC-2026-999-no-front-matter.md").write_text("# bad\n", encoding="utf-8")
+        first = format_result(self.result())
+        second = format_result(self.result())
         self.assertEqual(first, second)
 
     def test_validator_is_read_only(self):
-        before = self.snapshot(); validate_repository(self.root); after = self.snapshot()
+        before = self.snapshot()
+        validate_repository(self.root)
+        after = self.snapshot()
         self.assertEqual(before, after)
 
     def test_cli_valid_repository_exit_zero(self):

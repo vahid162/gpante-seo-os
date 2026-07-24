@@ -6,6 +6,7 @@ This changelog is inspired by Keep a Changelog and records meaningful repository
 
 ### Added
 
+- Read-only Repository Validator MVP for current machine-readable schema, record discovery, scoped uniqueness, and approved cross-record reference checks.
 - Machine-readable JSON Schema Draft 2020-12 contracts for project metadata and record YAML front matter.
 - Record-first Run template layout with separate Run-local Evidence and Finding record templates.
 - Canonical `project.yaml` metadata for repository version, maturity stage, and default agent access mode.

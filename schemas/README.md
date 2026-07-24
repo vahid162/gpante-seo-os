@@ -18,7 +18,7 @@ Active schemas:
 
 ## Non-goals in this phase
 
-This directory does not provide a repository-wide validator, generated registries, GitHub Actions, global Evidence registry, or global Finding registry. `../decisions/index.md` and `../tasks/backlog.md` remain manually maintained in this phase.
+This directory now documents the read-only Repository Validator MVP. Generator tooling, generated registries, GitHub Actions / CI enforcement, global Evidence registry, and global Finding registry remain deferred or non-goals. `../decisions/index.md` and `../tasks/backlog.md` remain manually maintained in this phase.
 
 ## Template mode
 
@@ -34,7 +34,7 @@ Placeholders such as `DEC-YYYY-NNN`, `TSK-YYYY-NNN`, `EV-NNN`, `FND-NNN`, `YYYY-
 
 ## Repository Validator MVP
 
-`tools/validate_repository.py` is the current read-only Repository Validator MVP for the machine-readable contracts in this directory. It checks that schemas parse as JSON Schema Draft 2020-12, validates explicitly discovered records against the schema selected by path or `record_type`, verifies scoped identifier uniqueness, and resolves the currently supported Run-local and cross-record references.
+`tools/validate_repository.py` is the current read-only Repository Validator MVP for the machine-readable contracts in this directory. It checks that schemas parse as JSON Schema Draft 2020-12, discovers records from explicit canonical paths, requires front matter `record_type` to match the type expected by that path, validates each record against the matching schema, verifies scoped identifier uniqueness, and resolves the currently supported Run-local and cross-record references.
 
 Run it locally from the repository root with:
 
