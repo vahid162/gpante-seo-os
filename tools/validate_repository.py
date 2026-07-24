@@ -152,8 +152,12 @@ def _load_schemas(result: ValidationResult) -> tuple[dict[str, dict[str, Any]], 
     for path in sorted((result.root / "schemas").glob("*.schema.json")):
         try:
             schema = json.loads(path.read_text(encoding="utf-8"))
+            if not isinstance(schema, dict):
+                _add_error(result, "schema", path, "Schema document must be a JSON object.")
+                continue
             if schema.get("$schema") != DRAFT_2020_12:
                 _add_error(result, "schema", path, "Schema must declare JSON Schema Draft 2020-12 in $schema.", field="$schema")
+                continue
             Draft202012Validator.check_schema(schema)
             schema_id = schema.get("$id")
             if not isinstance(schema_id, str):

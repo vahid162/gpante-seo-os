@@ -1,4 +1,5 @@
 import hashlib
+import json
 import shutil
 import subprocess
 import sys
@@ -10,7 +11,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
-from validate_repository import format_result, validate_repository  # noqa: E402
+from validate_repository import ValidationResult, format_result, validate_repository  # noqa: E402
 
 
 def front(data):
@@ -296,6 +297,69 @@ class RepositoryValidatorTest(unittest.TestCase):
     def test_invalid_json_schema_fails(self):
         (self.root / "schemas" / "bad.schema.json").write_text('{"$schema": "https://json-schema.org/draft/2020-12/schema", "type": 7}', encoding="utf-8")
         self.assertInvalidContains("JSON Schema check failed")
+
+    def test_missing_schema_dialect_returns_controlled_error(self):
+        path = self.root / "schemas" / "task.schema.json"
+        schema = json.loads(path.read_text(encoding="utf-8"))
+        del schema["$schema"]
+        path.write_text(json.dumps(schema), encoding="utf-8")
+
+        result = self.result()
+
+        self.assertIsInstance(result, ValidationResult)
+        self.assertNotEqual(0, result.exit_code)
+        errors = [
+            error
+            for error in result.errors
+            if error.path == "schemas/task.schema.json" and error.field == "$schema"
+        ]
+        self.assertEqual(1, len(errors), format_result(result))
+        self.assertEqual(
+            "Schema must declare JSON Schema Draft 2020-12 in $schema.",
+            errors[0].message,
+        )
+
+    def test_unsupported_schema_dialect_returns_controlled_error(self):
+        path = self.root / "schemas" / "task.schema.json"
+        schema = json.loads(path.read_text(encoding="utf-8"))
+        schema["$schema"] = "https://json-schema.org/draft/2019-09/schema"
+        path.write_text(json.dumps(schema), encoding="utf-8")
+
+        result = self.result()
+
+        self.assertIsInstance(result, ValidationResult)
+        self.assertNotEqual(0, result.exit_code)
+        errors = [
+            error
+            for error in result.errors
+            if error.path == "schemas/task.schema.json" and error.field == "$schema"
+        ]
+        self.assertEqual(1, len(errors), format_result(result))
+        self.assertEqual(
+            "Schema must declare JSON Schema Draft 2020-12 in $schema.",
+            errors[0].message,
+        )
+
+    def test_non_object_json_schema_returns_controlled_error(self):
+        path = self.root / "schemas" / "task.schema.json"
+        path.write_text("[]", encoding="utf-8")
+
+        result = self.result()
+
+        self.assertIsInstance(result, ValidationResult)
+        self.assertNotEqual(0, result.exit_code)
+        errors = [
+            error
+            for error in result.errors
+            if error.category == "schema"
+            and error.path == "schemas/task.schema.json"
+        ]
+        self.assertEqual(1, len(errors), format_result(result))
+        self.assertEqual(
+            "Schema document must be a JSON object.",
+            errors[0].message,
+        )
+        self.assertNotIn("[]", format_result(result))
 
     def test_markdown_without_front_matter_fails(self):
         (self.root / "decisions" / "DEC-2026-999-no-front-matter.md").write_text("# No front matter\n", encoding="utf-8")
