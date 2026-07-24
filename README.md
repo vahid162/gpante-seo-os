@@ -21,7 +21,7 @@ Evidence → Finding → Strategy → Approved Task → Manual Change → Valida
 - قراردادهای Machine-readable فعلی به‌صورت Record-first تعریف شده‌اند: Markdown فرمت اصلی انسان‌خوان باقی می‌ماند و Metadata رکوردها در YAML front matter قرار می‌گیرد.
 - در این مرحله `decisions/index.md` و `tasks/backlog.md` همچنان دستی هستند؛ تغییر مالکیت کامل Registryها و Generated کردن آن‌ها به PR آینده موکول شده است.
 - Evidence ID و Finding ID فقط داخل Run مربوط یکتا هستند و Global Evidence Registry ایجاد نمی‌شود.
-- Run state همچنان در `runs/<run-id>/state.yaml` نگهداری می‌شود. Schemaها در [`schemas/`](schemas/README.md) قرار دارند، اما Validator سراسری، Generator و CI هنوز وجود ندارند.
+- Run state همچنان در `runs/<run-id>/state.yaml` نگهداری می‌شود. Schemaها و Repository Validator MVP فقط‌خواندنی در [`schemas/`](schemas/README.md) مستند شده‌اند؛ Generator، Generated registryها، انتقال مالکیت Canonical و CI enforcement هنوز وجود ندارند.
 
 ## اجزای اصلی مخزن
 

@@ -40,7 +40,7 @@ Optional fields:
 
 An identifier only needs to be unique within one run in this version. For example, `EV-001` is acceptable within a single run.
 
-This policy does not require a global evidence registry. JSON Schema contracts now exist in `../schemas/`, but this policy remains the canonical source for Evidence classification, storage, sanitization, and metadata requirements. A repository-wide validator is still out of scope for this phase.
+This policy does not require a global evidence registry. The read-only Repository Validator validates applicable machine-readable Evidence records against the JSON Schema contracts in `../schemas/`, while this policy remains the canonical source for Evidence classification, storage, sanitization, and metadata requirements. Generator implementation, canonical ownership transfer, CI enforcement, and Production access or changes remain out of scope.
 
 ## Allowed source types
 
