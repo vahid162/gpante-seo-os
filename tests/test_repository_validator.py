@@ -428,6 +428,40 @@ class RepositoryValidatorTest(unittest.TestCase):
         path.write_text(path.read_text(encoding="utf-8").replace("EV-002", "EV-001"), encoding="utf-8")
         self.assertInvalidContains("same Run")
 
+    def test_malformed_relationship_values_return_controlled_schema_errors(self):
+        path = self.root / "decisions" / "DEC-2026-001-site-knowledge-canonical-location.md"
+        for malformed in (123, [{}]):
+            with self.subTest(malformed=malformed):
+                data = read_front(path)
+                data["related_tasks"] = malformed
+                write_front(path, data)
+
+                result = self.result()
+
+                self.assertIsInstance(result, ValidationResult)
+                self.assertNotEqual(0, result.exit_code)
+                self.assertTrue(
+                    any(
+                        error.category == "record"
+                        and error.path == "decisions/DEC-2026-001-site-knowledge-canonical-location.md"
+                        and error.field.startswith("related_tasks")
+                        for error in result.errors
+                    ),
+                    format_result(result),
+                )
+                self.assertFalse(
+                    any(error.category == "configuration" for error in result.errors),
+                    format_result(result),
+                )
+                self.assertFalse(
+                    any(
+                        error.category == "reference"
+                        and error.field.startswith("related_tasks")
+                        for error in result.errors
+                    ),
+                    format_result(result),
+                )
+
     def test_evidence_related_run_mismatch_fails(self):
         run = self.add_run("2026-07-24-test-one")
         path = run / "evidence" / "ev-001.md"
@@ -498,6 +532,93 @@ class RepositoryValidatorTest(unittest.TestCase):
         task_data = read_front(task_path)
         task_data["related_decisions"] = ["DEC-2026-001"]
         write_front(task_path, task_data)
+
+        result = self.result()
+
+        self.assertEqual(0, result.exit_code, format_result(result))
+
+    def test_evidence_missing_related_finding_fails(self):
+        run = self.add_run()
+        path = run / "evidence" / "ev-001.md"
+        data = read_front(path)
+        data["related_findings"] = ["FND-999"]
+        write_front(path, data)
+
+        result = self.result()
+
+        self.assertNotEqual(0, result.exit_code)
+        errors = [
+            error
+            for error in result.errors
+            if error.category == "reference"
+            and error.path == "runs/2026-07-24-test-run/evidence/ev-001.md"
+            and error.field == "related_findings:FND-999"
+        ]
+        self.assertEqual(1, len(errors), format_result(result))
+        self.assertEqual(
+            "Evidence related_finding must resolve within the same Run.",
+            errors[0].message,
+        )
+
+    def test_finding_missing_related_decision_fails(self):
+        run = self.add_run()
+        path = run / "findings" / "fnd-001.md"
+        data = read_front(path)
+        data["related_decisions"] = ["DEC-2026-999"]
+        write_front(path, data)
+
+        result = self.result()
+
+        self.assertNotEqual(0, result.exit_code)
+        errors = [
+            error
+            for error in result.errors
+            if error.category == "reference"
+            and error.path == "runs/2026-07-24-test-run/findings/fnd-001.md"
+            and error.field == "related_decisions:DEC-2026-999"
+        ]
+        self.assertEqual(1, len(errors), format_result(result))
+        self.assertEqual(
+            "Finding related_decision must resolve to a real Decision record in this repository.",
+            errors[0].message,
+        )
+
+    def test_finding_missing_related_task_fails(self):
+        run = self.add_run()
+        path = run / "findings" / "fnd-001.md"
+        data = read_front(path)
+        data["related_tasks"] = ["TSK-2026-999"]
+        write_front(path, data)
+
+        result = self.result()
+
+        self.assertNotEqual(0, result.exit_code)
+        errors = [
+            error
+            for error in result.errors
+            if error.category == "reference"
+            and error.path == "runs/2026-07-24-test-run/findings/fnd-001.md"
+            and error.field == "related_tasks:TSK-2026-999"
+        ]
+        self.assertEqual(1, len(errors), format_result(result))
+        self.assertEqual(
+            "Finding related_task must resolve to a real Task record in this repository.",
+            errors[0].message,
+        )
+
+    def test_explicit_relationship_targets_resolve(self):
+        run = self.add_run()
+        evidence_path = run / "evidence" / "ev-001.md"
+        evidence_data = read_front(evidence_path)
+        evidence_data["related_findings"] = ["FND-001"]
+        write_front(evidence_path, evidence_data)
+
+        finding_path = run / "findings" / "fnd-001.md"
+        finding_data = read_front(finding_path)
+        finding_data["related_decisions"] = ["DEC-2026-001"]
+        finding_data["related_tasks"] = ["TSK-2026-123"]
+        write_front(finding_path, finding_data)
+        self.add_task()
 
         result = self.result()
 

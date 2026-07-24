@@ -261,6 +261,13 @@ def _unique(result: ValidationResult, seen: dict[str, Path], record: Record, mes
         seen[record.record_id] = record.path
 
 
+def _string_list(data: dict[str, Any], field_name: str) -> list[str]:
+    value = data.get(field_name)
+    if not isinstance(value, list) or not all(isinstance(item, str) for item in value):
+        return []
+    return value
+
+
 def _validate_path_contracts(result: ValidationResult, record: Record) -> None:
     if record.record_type != record.expected_record_type:
         _add_error(result, "semantic", record.path, f"record_type must match canonical path. Expected {record.expected_record_type!r}, found {record.record_type!r}.", record.record_id, "record_type")
@@ -303,27 +310,38 @@ def _semantic_validation(result: ValidationResult) -> None:
             if record.record_id and record.data.get(field_name) == record.record_id:
                 _add_error(result, "semantic", record.path, "Record must not directly reference itself.", record.record_id, field_name)
         if record.record_type == "finding" and record.run_id:
-            for ev_id in record.data.get("evidence") or []:
+            for ev_id in _string_list(record.data, "evidence"):
                 if ev_id not in evidence.get(record.run_id, {}):
                     _add_error(result, "reference", record.path, "Finding evidence reference must resolve within the same Run.", record.record_id, f"evidence:{ev_id}")
+        if record.record_type == "evidence" and record.run_id:
+            for finding_id in _string_list(record.data, "related_findings"):
+                if finding_id not in findings.get(record.run_id, {}):
+                    _add_error(result, "reference", record.path, "Evidence related_finding must resolve within the same Run.", record.record_id, f"related_findings:{finding_id}")
+        if record.record_type == "finding":
+            for decision_id in _string_list(record.data, "related_decisions"):
+                if decision_id not in decisions:
+                    _add_error(result, "reference", record.path, "Finding related_decision must resolve to a real Decision record in this repository.", record.record_id, f"related_decisions:{decision_id}")
+            for task_id in _string_list(record.data, "related_tasks"):
+                if task_id not in tasks:
+                    _add_error(result, "reference", record.path, "Finding related_task must resolve to a real Task record in this repository.", record.record_id, f"related_tasks:{task_id}")
         if record.record_type == "decision":
-            for task_id in record.data.get("related_tasks") or []:
+            for task_id in _string_list(record.data, "related_tasks"):
                 if task_id not in tasks:
                     _add_error(result, "reference", record.path, "related_task must resolve to a real Task record in this repository.", record.record_id, f"related_tasks:{task_id}")
         if record.record_type == "task":
-            for decision_id in record.data.get("related_decisions") or []:
+            for decision_id in _string_list(record.data, "related_decisions"):
                 if decision_id not in decisions:
                     _add_error(result, "reference", record.path, "related_decision must resolve to a real Decision record in this repository.", record.record_id, f"related_decisions:{decision_id}")
         if record.record_type in {"decision", "task"}:
             related_run = record.data.get("related_run")
-            related_findings = record.data.get("related_findings") or []
-            if related_run and related_run not in result.real_run_ids:
-                _add_error(result, "reference", record.path, "related_run must resolve to a real Run state in this repository.", record.record_id, "related_run")
-            if related_findings and not related_run:
+            related_findings = _string_list(record.data, "related_findings")
+            if related_findings and related_run is None:
                 _add_error(result, "reference", record.path, "related_findings requires related_run so Finding IDs resolve in Run scope.", record.record_id, "related_findings")
-            if related_run:
+            if isinstance(related_run, str) and related_run:
+                if related_run not in result.real_run_ids:
+                    _add_error(result, "reference", record.path, "related_run must resolve to a real Run state in this repository.", record.record_id, "related_run")
                 for fnd_id in related_findings:
-                    if fnd_id not in findings.get(str(related_run), {}):
+                    if fnd_id not in findings.get(related_run, {}):
                         _add_error(result, "reference", record.path, "related_finding must resolve inside related_run.", record.record_id, f"related_findings:{fnd_id}")
 
 
