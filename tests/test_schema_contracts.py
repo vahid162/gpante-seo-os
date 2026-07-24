@@ -138,6 +138,63 @@ class SchemaContractsTest(unittest.TestCase):
         self.assertIsInstance(instance["date"], str)
         self.assert_valid("decision.schema.json", instance)
 
+    def test_real_evidence_rejects_prohibited_classification(self):
+        with self.assertRaises(exceptions.ValidationError) as ctx:
+            validator("evidence.schema.json").validate(
+                load_yaml(
+                    ROOT
+                    / "tests/fixtures/schema/invalid/prohibited_real_evidence.yaml"
+                )
+            )
+        self.assertEqual(["classification"], list(ctx.exception.absolute_path))
+        self.assertIn("should not be valid", ctx.exception.message)
+
+        instance = load_yaml(
+            ROOT
+            / "tests/fixtures/schema/valid/repository_safe_real_evidence.yaml"
+        )
+        for classification in [
+            "repository-safe",
+            "sanitization-required",
+            "reference-only",
+        ]:
+            instance["classification"] = classification
+            self.assert_valid("evidence.schema.json", instance)
+
+        template = load_front_matter(
+            ROOT / "runs/_template/evidence/_evidence-template.md"
+        )
+        self.assert_valid("evidence.schema.json", template)
+        template["classification"] = "prohibited"
+        self.assert_valid("evidence.schema.json", template)
+
+    def test_confirmed_findings_require_evidence(self):
+        with self.assertRaises(exceptions.ValidationError) as ctx:
+            validator("finding.schema.json").validate(
+                load_yaml(
+                    ROOT
+                    / "tests/fixtures/schema/invalid/confirmed_finding_without_evidence.yaml"
+                )
+            )
+        self.assertEqual(["evidence"], list(ctx.exception.absolute_path))
+        self.assertIn("should be non-empty", ctx.exception.message)
+
+        for fixture in [
+            "confirmed_finding_with_evidence.yaml",
+            "draft_finding_without_evidence.yaml",
+        ]:
+            self.assert_valid(
+                "finding.schema.json",
+                load_yaml(ROOT / "tests/fixtures/schema/valid" / fixture),
+            )
+
+        self.assert_valid(
+            "finding.schema.json",
+            load_front_matter(
+                ROOT / "runs/_template/findings/_finding-template.md"
+            ),
+        )
+
     def test_real_records_with_findings_require_related_run(self):
         cases = [
             ("decision.schema.json", "decision_findings_without_related_run.yaml"),
