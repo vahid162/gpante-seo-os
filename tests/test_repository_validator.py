@@ -376,6 +376,31 @@ class RepositoryValidatorTest(unittest.TestCase):
             format_result(result),
         )
 
+    def test_unresolved_shared_schema_ref_returns_controlled_error(self):
+        path = self.root / "schemas" / "common.schema.json"
+        schema = json.loads(path.read_text(encoding="utf-8"))
+        schema["$defs"]["nullable_run_id"]["oneOf"][1]["$ref"] = "common.schema.json#/$defs/nonexistent_definition"
+        path.write_text(json.dumps(schema), encoding="utf-8")
+
+        result = self.result()
+
+        self.assertIsInstance(result, ValidationResult)
+        self.assertEqual(1, result.exit_code)
+        errors = [
+            error
+            for error in result.errors
+            if error.category == "schema"
+            and error.path == "schemas/common.schema.json"
+            and error.field == "$ref"
+            and "Local $ref does not resolve" in error.message
+        ]
+        self.assertEqual(1, len(errors), format_result(result))
+        self.assertNotIn("Unexpected validation failure", format_result(result))
+        self.assertFalse(
+            any(error.category == "configuration" for error in result.errors),
+            format_result(result),
+        )
+
     def test_missing_schema_dialect_returns_controlled_error(self):
         path = self.root / "schemas" / "task.schema.json"
         schema = json.loads(path.read_text(encoding="utf-8"))
