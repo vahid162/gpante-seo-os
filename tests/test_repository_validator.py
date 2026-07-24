@@ -302,6 +302,38 @@ class RepositoryValidatorTest(unittest.TestCase):
             errors[0].message,
         )
 
+    def test_misnamed_decision_is_discovered_and_checked_for_uniqueness(self):
+        path = self.root / "decisions" / "misnamed-decision.md"
+        source = self.root / "decisions" / "DEC-2026-001-site-knowledge-canonical-location.md"
+        write_front(path, read_front(source))
+
+        result = self.result()
+
+        real_decision_paths = {
+            record.relative_path
+            for record in result.records
+            if record.expected_record_type == "decision"
+            and record.expected_is_template is False
+        }
+        self.assertIn("decisions/misnamed-decision.md", real_decision_paths)
+        self.assertTrue(
+            {
+                "decisions/README.md",
+                "decisions/index.md",
+                "decisions/decision-template.md",
+            }.isdisjoint(real_decision_paths)
+        )
+        self.assertNotEqual(0, result.exit_code)
+        errors = [
+            error
+            for error in result.errors
+            if error.category == "semantic"
+            and error.path == "decisions/misnamed-decision.md"
+            and error.record_id == "DEC-2026-001"
+            and "Decision ID must be repository-unique." in error.message
+        ]
+        self.assertEqual(1, len(errors), format_result(result))
+
     def test_valid_front_matter_parses(self):
         self.add_run()
         self.assertEqual(0, self.result().exit_code, format_result(self.result()))

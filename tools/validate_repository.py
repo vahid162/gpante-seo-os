@@ -38,6 +38,7 @@ REQUIRED_REPOSITORY_RECORDS = {
 }
 EVIDENCE_DIRECTORY_IGNORES = {"README.md", "_evidence-template.md"}
 FINDINGS_DIRECTORY_IGNORES = {"README.md", "_finding-template.md"}
+DECISION_DIRECTORY_IGNORES = {"README.md", "index.md", "decision-template.md"}
 TASK_DIRECTORY_IGNORES = {"README.md", "backlog.md", "task-template.md"}
 TASK_FILENAME_RE = re.compile(r"^TSK-\d{4}-\d{3}-[a-z0-9]+(?:-[a-z0-9]+)*\.md$")
 
@@ -219,7 +220,7 @@ def _discover_records(result: ValidationResult) -> list[Record]:
             candidates.append((path, schema_name, expected_type, expected_template, None))
         else:
             _add_error(result, "configuration", path, "Required machine-readable repository file is missing.")
-    candidates += [(p, "decision.schema.json", "decision", False, None) for p in sorted((root / "decisions").glob("DEC-*.md"))]
+    candidates += [(p, "decision.schema.json", "decision", False, None) for p in sorted((root / "decisions").glob("*.md")) if p.name not in DECISION_DIRECTORY_IGNORES]
     candidates += [(p, "task.schema.json", "task", False, None) for p in sorted((root / "tasks").glob("*.md")) if p.name not in TASK_DIRECTORY_IGNORES]
     if (root / "runs").exists():
         for run_dir in sorted(path for path in (root / "runs").iterdir() if path.is_dir() and path.name != "_template"):
