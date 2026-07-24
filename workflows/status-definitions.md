@@ -39,12 +39,12 @@ Workflow stage is recorded separately from Run status in `runs/<run-id>/state.ya
 
 ## Finding statuses
 
-Findings are owned by `runs/<run-id>/findings.md`.
+Findings are owned by record files inside `runs/<run-id>/findings/`.
 
 | Status | Meaning | Who may transition it | Minimum transition requirements |
 | --- | --- | --- | --- |
 | `draft` | A possible Finding is being documented but is not confirmed. | Run owner or reviewer. | Observed fact, Evidence reference, or limitation recorded. |
-| `confirmed` | Evidence supports the Finding within documented limitations. | Run owner or reviewer. | Fact, inference, recommendation, risk, confidence, and Evidence reference recorded. |
+| `confirmed` | Evidence supports the Finding within documented limitations. | Run owner or reviewer. | Fact, inference, recommendation, severity, risk, confidence, and Evidence reference recorded. |
 | `deferred` | The Finding is plausible or useful but not being acted on now. | Run owner or reviewer. | Deferral reason recorded. |
 | `resolved` | The Finding has been addressed and validated where applicable. | Task owner or reviewer. | Related Task or Decision and Validation status recorded. |
 | `rejected` | The Finding is not supported or is out of scope. | Run owner or reviewer. | Rejection reason recorded. |

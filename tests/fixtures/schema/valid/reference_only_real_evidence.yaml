@@ -1,0 +1,14 @@
+schema_version: 1
+record_type: evidence
+is_template: false
+evidence_id: EV-905
+title: Reference-only metadata fixture
+owner: gpante-seo-os
+collected_at: "2026-07-24"
+source_type: repository_document
+scope: Fixture-only schema validation
+classification: reference-only
+sanitized: false
+storage: external_reference
+related_run: 2026-07-24-schema-fixture
+related_findings: []

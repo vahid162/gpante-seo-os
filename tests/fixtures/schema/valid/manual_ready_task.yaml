@@ -1,0 +1,21 @@
+schema_version: 1
+record_type: task
+is_template: false
+task_id: TSK-2026-914
+title: Approved manual ready Task fixture
+status: ready
+priority: Medium
+owner: gpante-seo-os
+implementation_owner: gpante-seo-os
+related_run: null
+related_findings: []
+related_decisions: []
+approval:
+  required: true
+  status: approved
+risk: Medium
+implementation_mode: manual
+dependencies: []
+validation_result: pending
+backup_required: true
+backup_verified: true

@@ -56,14 +56,16 @@ Each real Run must include:
 - `state.yaml`
 - `scope.md`
 - `evidence/README.md`
-- `findings.md`
+- `evidence/` containing Run-local Evidence records when Evidence is recorded
+- `findings/README.md`
+- `findings/` containing Run-local Finding records when Findings are recorded
 - `roadmap.md`
 - `tasks.md`
 - `validation.md`
 
 ## Run creation process
 
-Copy `runs/_template/` into a correctly named Run directory. Replace placeholders before the Run becomes active. Follow `workflows/run-lifecycle.md` and use status values from `workflows/status-definitions.md`.
+Copy `runs/_template/` into a correctly named Run directory. Replace placeholders before the Run becomes active. In `state.yaml`, set `is_template: false`, replace the placeholder `run_id`, and verify that `run_id` exactly matches the directory name. Follow `workflows/run-lifecycle.md` and use status values from `workflows/status-definitions.md`.
 
 ## Relationships
 

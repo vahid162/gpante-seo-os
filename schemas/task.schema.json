@@ -1,0 +1,302 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "./task.schema.json",
+  "title": "Task schema",
+  "description": "Validates Task YAML front matter. Status in the individual file is a synchronized snapshot; canonical task status remains in tasks/backlog.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_type",
+    "is_template",
+    "task_id",
+    "title",
+    "status",
+    "priority",
+    "owner",
+    "implementation_owner",
+    "related_run",
+    "related_findings",
+    "related_decisions",
+    "approval",
+    "risk",
+    "implementation_mode",
+    "dependencies",
+    "validation_result",
+    "backup_required",
+    "backup_verified"
+  ],
+  "properties": {
+    "schema_version": {
+      "$ref": "common.schema.json#/$defs/schema_version"
+    },
+    "record_type": {
+      "const": "task"
+    },
+    "is_template": {
+      "type": "boolean"
+    },
+    "task_id": {},
+    "title": {
+      "type": "string"
+    },
+    "status": {
+      "$ref": "common.schema.json#/$defs/task_status"
+    },
+    "priority": {
+      "enum": [
+        "Low",
+        "Medium",
+        "High"
+      ]
+    },
+    "owner": {},
+    "implementation_owner": {},
+    "related_run": {},
+    "related_findings": {},
+    "related_decisions": {},
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required",
+        "status"
+      ],
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "status": {
+          "$ref": "common.schema.json#/$defs/approval_status"
+        }
+      }
+    },
+    "risk": {
+      "$ref": "common.schema.json#/$defs/risk"
+    },
+    "implementation_mode": {
+      "enum": [
+        "manual",
+        "documentation_only",
+        "not_applicable"
+      ]
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "validation_result": {
+      "$ref": "common.schema.json#/$defs/validation_status"
+    },
+    "backup_required": {
+      "type": "boolean"
+    },
+    "backup_verified": {
+      "type": "boolean"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "is_template": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "task_id": {
+            "oneOf": [
+              {
+                "$ref": "common.schema.json#/$defs/task_id"
+              },
+              {
+                "$ref": "common.schema.json#/$defs/task_id_template"
+              }
+            ]
+          },
+          "owner": {
+            "oneOf": [
+              {
+                "$ref": "common.schema.json#/$defs/real_owner"
+              },
+              {
+                "$ref": "common.schema.json#/$defs/template_owner"
+              }
+            ]
+          },
+          "implementation_owner": {
+            "oneOf": [
+              {
+                "$ref": "common.schema.json#/$defs/real_owner"
+              },
+              {
+                "$ref": "common.schema.json#/$defs/template_owner"
+              }
+            ]
+          },
+          "related_run": {
+            "$ref": "common.schema.json#/$defs/nullable_run_id_template"
+          },
+          "related_findings": {
+            "$ref": "common.schema.json#/$defs/finding_id_array_template"
+          },
+          "related_decisions": {
+            "$ref": "common.schema.json#/$defs/decision_id_array_template"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "is_template": {
+            "const": false
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "task_id": {
+            "$ref": "common.schema.json#/$defs/task_id"
+          },
+          "owner": {
+            "$ref": "common.schema.json#/$defs/real_owner"
+          },
+          "implementation_owner": {
+            "$ref": "common.schema.json#/$defs/real_owner"
+          },
+          "related_run": {
+            "$ref": "common.schema.json#/$defs/nullable_run_id"
+          },
+          "related_findings": {
+            "$ref": "common.schema.json#/$defs/finding_id_array"
+          },
+          "related_decisions": {
+            "$ref": "common.schema.json#/$defs/decision_id_array"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "related_findings": {
+                  "minItems": 1
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "related_run": {
+                  "$ref": "common.schema.json#/$defs/run_id"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "enum": [
+                    "approved",
+                    "ready",
+                    "in_progress",
+                    "validation_pending",
+                    "completed",
+                    "rolled_back"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "approval": {
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "approved",
+                        "not_required"
+                      ]
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "implementation_mode": {
+                        "const": "manual"
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "approval": {
+                        "properties": {
+                          "required": {
+                            "const": true
+                          },
+                          "status": {
+                            "const": "approved"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "enum": [
+                    "ready",
+                    "in_progress",
+                    "validation_pending",
+                    "completed",
+                    "rolled_back"
+                  ]
+                },
+                "backup_required": {
+                  "const": true
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "backup_verified": {
+                  "const": true
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "completed"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "validation_result": {
+                  "enum": [
+                    "passed",
+                    "not_applicable"
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

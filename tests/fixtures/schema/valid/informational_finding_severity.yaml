@@ -1,0 +1,16 @@
+schema_version: 1
+record_type: finding
+is_template: false
+finding_id: FND-911
+title: Informational Finding severity fixture
+status: rejected
+owner: gpante-seo-os
+related_run: 2026-07-24-schema-fixture
+evidence: []
+severity: Informational
+risk: Low
+confidence: Medium
+related_decisions: []
+related_tasks: []
+supersedes: null
+superseded_by: null

@@ -1,8 +1,6 @@
-# Reusable Run state template. This is not an actual Run state.
-# Copy this file into a correctly named Run directory before use.
-# The run_id must match the Run directory name exactly.
-# Allowed status and workflow_stage values are defined in ../../workflows/status-definitions.md.
-# production_write remains false unless an explicitly approved Task authorizes a manual change.
+schema_version: 1
+record_type: run_state
+is_template: true
 
 run_id: YYYY-MM-DD-short-slug
 status: initialized
@@ -18,5 +16,5 @@ approval:
 
 owner: OWNER_REQUIRED
 
-created_at: YYYY-MM-DD
-updated_at: YYYY-MM-DD
+created_at: "YYYY-MM-DD"
+updated_at: "YYYY-MM-DD"

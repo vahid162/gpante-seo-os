@@ -1,0 +1,14 @@
+schema_version: 1
+record_type: evidence
+is_template: false
+evidence_id: EV-903
+title: Unsanitized sanitization-required fixture
+owner: gpante-seo-os
+collected_at: "2026-07-24"
+source_type: repository_document
+scope: Fixture-only schema validation
+classification: sanitization-required
+sanitized: false
+storage: markdown_summary
+related_run: 2026-07-24-schema-fixture
+related_findings: []

@@ -1,0 +1,21 @@
+schema_version: 1
+record_type: task
+is_template: true
+task_id: TSK-YYYY-NNN
+title: Invalid status
+status: done
+priority: Medium
+owner: OWNER_REQUIRED
+implementation_owner: OWNER_REQUIRED
+related_run: null
+related_findings: []
+related_decisions: []
+approval:
+  required: true
+  status: pending
+risk: Medium
+implementation_mode: manual
+backup_required: false
+backup_verified: false
+dependencies: []
+validation_result: pending

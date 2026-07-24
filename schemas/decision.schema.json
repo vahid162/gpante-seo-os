@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "./decision.schema.json",
+  "title": "Decision schema",
+  "description": "Validates Decision YAML front matter. Narrative remains in Markdown body; status meanings are canonical in workflows/status-definitions.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_type",
+    "is_template",
+    "decision_id",
+    "title",
+    "status",
+    "date",
+    "owner",
+    "related_run",
+    "related_findings",
+    "related_tasks",
+    "supersedes",
+    "superseded_by"
+  ],
+  "properties": {
+    "schema_version": {
+      "$ref": "common.schema.json#/$defs/schema_version"
+    },
+    "record_type": {
+      "const": "decision"
+    },
+    "is_template": {
+      "type": "boolean"
+    },
+    "decision_id": {},
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "$ref": "common.schema.json#/$defs/decision_status"
+    },
+    "date": {},
+    "owner": {},
+    "related_run": {},
+    "related_findings": {},
+    "related_tasks": {},
+    "supersedes": {},
+    "superseded_by": {}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "is_template": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "decision_id": {
+            "oneOf": [
+              {
+                "$ref": "common.schema.json#/$defs/decision_id"
+              },
+              {
+                "$ref": "common.schema.json#/$defs/decision_id_template"
+              }
+            ]
+          },
+          "date": {
+            "$ref": "common.schema.json#/$defs/iso_date"
+          },
+          "owner": {
+            "oneOf": [
+              {
+                "$ref": "common.schema.json#/$defs/real_owner"
+              },
+              {
+                "$ref": "common.schema.json#/$defs/template_owner"
+              }
+            ]
+          },
+          "related_run": {
+            "$ref": "common.schema.json#/$defs/nullable_run_id_template"
+          },
+          "related_findings": {
+            "$ref": "common.schema.json#/$defs/finding_id_array_template"
+          },
+          "related_tasks": {
+            "$ref": "common.schema.json#/$defs/task_id_array_template"
+          },
+          "supersedes": {
+            "$ref": "common.schema.json#/$defs/nullable_decision_id_template"
+          },
+          "superseded_by": {
+            "$ref": "common.schema.json#/$defs/nullable_decision_id_template"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "is_template": {
+            "const": false
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "decision_id": {
+            "$ref": "common.schema.json#/$defs/decision_id"
+          },
+          "date": {
+            "$ref": "common.schema.json#/$defs/real_iso_date"
+          },
+          "owner": {
+            "$ref": "common.schema.json#/$defs/real_owner"
+          },
+          "related_run": {
+            "$ref": "common.schema.json#/$defs/nullable_run_id"
+          },
+          "related_findings": {
+            "$ref": "common.schema.json#/$defs/finding_id_array"
+          },
+          "related_tasks": {
+            "$ref": "common.schema.json#/$defs/task_id_array"
+          },
+          "supersedes": {
+            "$ref": "common.schema.json#/$defs/nullable_decision_id"
+          },
+          "superseded_by": {
+            "$ref": "common.schema.json#/$defs/nullable_decision_id"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "related_findings": {
+                  "minItems": 1
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "related_run": {
+                  "$ref": "common.schema.json#/$defs/run_id"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

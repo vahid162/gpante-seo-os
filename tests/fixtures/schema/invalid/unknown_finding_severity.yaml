@@ -1,0 +1,16 @@
+schema_version: 1
+record_type: finding
+is_template: false
+finding_id: FND-912
+title: Unknown Finding severity fixture
+status: draft
+owner: gpante-seo-os
+related_run: 2026-07-24-schema-fixture
+evidence: []
+severity: Urgent
+risk: Medium
+confidence: Medium
+related_decisions: []
+related_tasks: []
+supersedes: null
+superseded_by: null
