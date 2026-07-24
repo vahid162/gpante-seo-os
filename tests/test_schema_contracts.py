@@ -153,13 +153,14 @@ class SchemaContractsTest(unittest.TestCase):
             ROOT
             / "tests/fixtures/schema/valid/repository_safe_real_evidence.yaml"
         )
-        for classification in [
-            "repository-safe",
-            "sanitization-required",
-            "reference-only",
-        ]:
-            instance["classification"] = classification
-            self.assert_valid("evidence.schema.json", instance)
+        self.assert_valid("evidence.schema.json", instance)
+        self.assert_valid(
+            "evidence.schema.json",
+            load_yaml(
+                ROOT
+                / "tests/fixtures/schema/valid/reference_only_real_evidence.yaml"
+            ),
+        )
 
         template = load_front_matter(
             ROOT / "runs/_template/evidence/_evidence-template.md"
@@ -167,6 +168,32 @@ class SchemaContractsTest(unittest.TestCase):
         self.assert_valid("evidence.schema.json", template)
         template["classification"] = "prohibited"
         self.assert_valid("evidence.schema.json", template)
+
+    def test_sanitization_required_evidence_must_be_sanitized(self):
+        with self.assertRaises(exceptions.ValidationError) as ctx:
+            validator("evidence.schema.json").validate(
+                load_yaml(
+                    ROOT
+                    / "tests/fixtures/schema/invalid/unsanitized_sanitization_required_evidence.yaml"
+                )
+            )
+        self.assertEqual(["sanitized"], list(ctx.exception.absolute_path))
+        self.assertEqual("const", ctx.exception.validator)
+        self.assertIs(ctx.exception.validator_value, True)
+
+        self.assert_valid(
+            "evidence.schema.json",
+            load_yaml(
+                ROOT
+                / "tests/fixtures/schema/valid/sanitized_sanitization_required_evidence.yaml"
+            ),
+        )
+        self.assert_valid(
+            "evidence.schema.json",
+            load_front_matter(
+                ROOT / "runs/_template/evidence/_evidence-template.md"
+            ),
+        )
 
     def test_confirmed_findings_require_evidence(self):
         with self.assertRaises(exceptions.ValidationError) as ctx:

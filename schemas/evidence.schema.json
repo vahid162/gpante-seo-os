@@ -144,7 +144,28 @@
           "related_findings": {
             "$ref": "common.schema.json#/$defs/finding_id_array"
           }
-        }
+        },
+        "allOf": [
+          {
+            "if": {
+              "required": [
+                "classification"
+              ],
+              "properties": {
+                "classification": {
+                  "const": "sanitization-required"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "sanitized": {
+                  "const": true
+                }
+              }
+            }
+          }
+        ]
       }
     }
   ]
