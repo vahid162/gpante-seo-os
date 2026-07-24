@@ -195,6 +195,105 @@
                 }
               }
             }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "enum": [
+                    "approved",
+                    "ready",
+                    "in_progress",
+                    "validation_pending",
+                    "completed",
+                    "rolled_back"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "approval": {
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "approved",
+                        "not_required"
+                      ]
+                    }
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "implementation_mode": {
+                        "const": "manual"
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "approval": {
+                        "properties": {
+                          "required": {
+                            "const": true
+                          },
+                          "status": {
+                            "const": "approved"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "enum": [
+                    "ready",
+                    "in_progress",
+                    "validation_pending",
+                    "completed",
+                    "rolled_back"
+                  ]
+                },
+                "backup_required": {
+                  "const": true
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "backup_verified": {
+                  "const": true
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "completed"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "validation_result": {
+                  "enum": [
+                    "passed",
+                    "not_applicable"
+                  ]
+                }
+              }
+            }
           }
         ]
       }

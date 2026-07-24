@@ -195,6 +195,123 @@ class SchemaContractsTest(unittest.TestCase):
             ),
         )
 
+    def test_finding_severity_is_distinct_from_finding_and_task_risk(self):
+        for fixture in [
+            "critical_finding_severity.yaml",
+            "informational_finding_severity.yaml",
+        ]:
+            self.assert_valid(
+                "finding.schema.json",
+                load_yaml(ROOT / "tests/fixtures/schema/valid" / fixture),
+            )
+
+        with self.assertRaises(exceptions.ValidationError) as ctx:
+            validator("finding.schema.json").validate(
+                load_yaml(
+                    ROOT
+                    / "tests/fixtures/schema/invalid/unknown_finding_severity.yaml"
+                )
+            )
+        self.assertEqual(["severity"], list(ctx.exception.absolute_path))
+        self.assertIn("is not one of", ctx.exception.message)
+
+        finding = load_yaml(
+            ROOT / "tests/fixtures/schema/valid/critical_finding_severity.yaml"
+        )
+        for risk in ["Low", "Medium", "High"]:
+            finding["risk"] = risk
+            self.assert_valid("finding.schema.json", finding)
+        for risk in ["Critical", "Informational"]:
+            finding["risk"] = risk
+            self.assert_invalid("finding.schema.json", finding, "is not one of")
+
+        task = load_yaml(
+            ROOT / "tests/fixtures/schema/valid/manual_ready_task.yaml"
+        )
+        for risk in ["Low", "Medium", "High"]:
+            task["risk"] = risk
+            self.assert_valid("task.schema.json", task)
+        for risk in ["Critical", "Informational"]:
+            task["risk"] = risk
+            self.assert_invalid("task.schema.json", task, "is not one of")
+
+        finding_template = load_front_matter(
+            ROOT / "runs/_template/findings/_finding-template.md"
+        )
+        self.assertEqual("Medium", finding_template["severity"])
+        self.assertEqual("Medium", finding_template["risk"])
+        self.assert_valid("finding.schema.json", finding_template)
+
+        for fixture_path in (ROOT / "tests/fixtures/schema").rglob("*.yaml"):
+            instance = load_yaml(fixture_path)
+            if instance.get("record_type") == "finding":
+                self.assertIn("severity", instance, fixture_path)
+
+    def test_task_actionable_status_approval_and_backup_gates(self):
+        invalid_cases = [
+            (
+                "ready_task_pending_approval.yaml",
+                ["approval", "status"],
+            ),
+            (
+                "manual_ready_task_not_required_approval.yaml",
+                ["approval", "required"],
+            ),
+            (
+                "ready_task_unverified_required_backup.yaml",
+                ["backup_verified"],
+            ),
+        ]
+        for fixture, expected_path in invalid_cases:
+            with self.assertRaises(exceptions.ValidationError) as ctx:
+                validator("task.schema.json").validate(
+                    load_yaml(ROOT / "tests/fixtures/schema/invalid" / fixture)
+                )
+            self.assertEqual(expected_path, list(ctx.exception.absolute_path))
+
+        rejected = load_yaml(
+            ROOT
+            / "tests/fixtures/schema/invalid/ready_task_pending_approval.yaml"
+        )
+        rejected["approval"]["status"] = "rejected"
+        self.assert_invalid("task.schema.json", rejected, "is not one of")
+
+        self.assert_valid(
+            "task.schema.json",
+            load_yaml(ROOT / "tests/fixtures/schema/valid/manual_ready_task.yaml"),
+        )
+
+        documentation_task = load_yaml(
+            ROOT / "tests/fixtures/schema/valid/documentation_ready_task.yaml"
+        )
+        self.assert_valid("task.schema.json", documentation_task)
+        documentation_task["implementation_mode"] = "not_applicable"
+        self.assert_valid("task.schema.json", documentation_task)
+
+        task_template = load_front_matter(ROOT / "tasks/task-template.md")
+        self.assertEqual("proposed", task_template["status"])
+        self.assertEqual("pending", task_template["approval"]["status"])
+        self.assert_valid("task.schema.json", task_template)
+
+    def test_completed_tasks_require_final_validation_result(self):
+        with self.assertRaises(exceptions.ValidationError) as ctx:
+            validator("task.schema.json").validate(
+                load_yaml(
+                    ROOT
+                    / "tests/fixtures/schema/invalid/completed_task_pending_validation.yaml"
+                )
+            )
+        self.assertEqual(["validation_result"], list(ctx.exception.absolute_path))
+        self.assertIn("is not one of", ctx.exception.message)
+
+        completed = load_yaml(
+            ROOT
+            / "tests/fixtures/schema/valid/completed_task_passed_validation.yaml"
+        )
+        self.assert_valid("task.schema.json", completed)
+        completed["validation_result"] = "not_applicable"
+        self.assert_valid("task.schema.json", completed)
+
     def test_real_records_with_findings_require_related_run(self):
         cases = [
             ("decision.schema.json", "decision_findings_without_related_run.yaml"),

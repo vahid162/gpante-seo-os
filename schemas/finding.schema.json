@@ -15,6 +15,7 @@
     "owner",
     "related_run",
     "evidence",
+    "severity",
     "risk",
     "confidence",
     "related_decisions",
@@ -42,6 +43,9 @@
     "owner": {},
     "related_run": {},
     "evidence": {},
+    "severity": {
+      "$ref": "common.schema.json#/$defs/finding_severity"
+    },
     "risk": {
       "$ref": "common.schema.json#/$defs/risk"
     },

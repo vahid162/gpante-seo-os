@@ -6,6 +6,7 @@ title: Missing status
 owner: OWNER_REQUIRED
 related_run: YYYY-MM-DD-short-slug
 evidence: []
+severity: Medium
 risk: Medium
 confidence: Medium
 related_decisions: []

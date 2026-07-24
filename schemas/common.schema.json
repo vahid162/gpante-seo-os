@@ -209,6 +209,16 @@
         "High"
       ]
     },
+    "finding_severity": {
+      "type": "string",
+      "enum": [
+        "Critical",
+        "High",
+        "Medium",
+        "Low",
+        "Informational"
+      ]
+    },
     "approval_status": {
       "type": "string",
       "enum": [

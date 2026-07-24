@@ -7,6 +7,7 @@ status: draft
 owner: gpante-seo-os
 related_run: 2026-07-24-schema-fixture
 evidence: []
+severity: Medium
 risk: Medium
 confidence: Medium
 related_decisions: []

@@ -9,6 +9,7 @@ owner: OWNER_REQUIRED
 related_run: YYYY-MM-DD-short-slug
 evidence:
   - EV-NNN
+severity: Medium
 risk: Medium
 confidence: Medium
 related_decisions: []
