@@ -18,7 +18,7 @@ superseded_by: null
 
 ## Context
 
-The repository needs a stable architecture for future machine validation without creating validators, JSON Schemas, GitHub Actions, real Runs, or operational Tasks in this PR. Version, maturity, and agent access mode also need separate canonical metadata so policy is not inferred from a version string.
+The repository needs a stable record-first architecture and a portable contract surface for machine validation. This PR delivers the first approved implementation phase by adding JSON Schema Draft 2020-12 contracts, YAML front matter to applicable records and templates, schema contract tests, and tested development dependency pins. It does not add a repository-wide Validator, Generator, generated registries, canonical ownership transfer, GitHub Actions or CI enforcement, real Run, Task, Evidence, or Finding records, or Production access or changes. Version, maturity, and agent access mode also need separate canonical metadata so policy is not inferred from a version string.
 
 ## Evidence
 
@@ -37,19 +37,19 @@ Medium. Adding metadata architecture changes repository ownership expectations a
 
 ## Approved Option
 
-Keep current canonical ownership unchanged in this PR, and define record-first Markdown records with YAML front matter plus generated registries as the target architecture for the next implementation phase.
+Keep current canonical ownership unchanged and implement the first phase of the record-first architecture: portable JSON Schema contracts, YAML front matter on applicable Markdown records and templates, schema contract tests, and tested development dependency pins. Defer the repository-wide Validator, Generator, generated registries, canonical ownership transfer, and CI enforcement to their later approved phases.
 
 ## Scope
 
-Repository metadata, current-versus-target Decision architecture, current-versus-target Task architecture, Run-local Evidence and Finding identifiers, future generated registries, and future validation automation planning.
+Repository metadata, JSON Schema contracts, applicable YAML front matter migration, schema contract tests, tested development dependency pins, current-versus-target Decision and Task architecture, Run-local Evidence and Finding identifiers, and planning for future Validator, Generator, generated registry, ownership-transfer, and CI phases.
 
 ## Validation Requirement
 
-Confirm that `project.yaml` is the canonical version, maturity, and agent mode metadata file; confirm no real Run, operational Task, JSON Schema, validator, GitHub Actions workflow, or Production change is introduced; confirm changed links resolve; confirm repository-wide searches no longer find old hard-coded version governance text.
+Confirm that every file under `schemas/*.schema.json` parses as JSON, passes `Draft202012Validator.check_schema`, and resolves all local `$ref` values through the configured `referencing.Registry`. Confirm that `project.yaml`, the Run state template, all applicable record templates, and both real Decision records validate against their schemas. Confirm that schema contract tests and tested development dependency pins are present and reproducible. Confirm that changed Markdown links resolve and that no repository-wide Validator, Generator, generated registry, GitHub Actions workflow or CI enforcement, real Run, Task, Evidence, or Finding record, Production access, or Production change is introduced.
 
 ## Rollback Requirement
 
-Revert this Decision and the related documentation changes in one git revert if the repository owner rejects record-first machine validation architecture. Because no Production or automation changes are introduced, rollback is documentation-only.
+Revert this PR if the repository owner rejects this implementation phase. Reversion removes the JSON Schema contracts, YAML front matter migration, schema contract tests, tested development dependency pins, and related documentation changes. Because this phase introduces no Production access or change, no Production rollback is required.
 
 ## Approval
 
@@ -57,7 +57,11 @@ Repository owner requested this architecture PR.
 
 ## Decision
 
-The target architecture is record-first and machine-validatable. Markdown remains the primary human-readable format, and record metadata will be stored in YAML front matter after the required Schema, Validator, and Generator are implemented and merged in a later PR. Current canonical ownership does not change in this PR. Until that future implementation is merged, `tasks/backlog.md` remains the canonical owner of Task status, individual Task records remain the canonical owners of approval, implementation history, detailed Validation, rollback, and monitoring, and `decisions/index.md` remains manually maintained. After the future Generator is implemented and merged, each individual Task record will own canonical Task status and `tasks/backlog.md` will become a generated view; `decisions/index.md` will also become a generated view. Evidence IDs and Finding IDs remain unique only within their related Run. The repository will not create a global Evidence registry. Run state remains owned by `runs/<run-id>/state.yaml`. JSON Schema, validator tooling, generator tooling, and CI enforcement are deferred to later PRs.
+The target architecture is record-first and machine-validatable, with Markdown remaining the primary human-readable format and structured metadata stored in YAML front matter. This PR completes the `Schema and Front Matter` phase by adding portable JSON Schema contracts, migrating applicable records and templates to YAML front matter, adding schema contract tests, and pinning the tested development dependencies used by those tests.
+
+Current canonical ownership does not change. `tasks/backlog.md` remains the canonical owner of Task status; individual Task records remain the canonical owners of approval, implementation history, detailed Validation, rollback, and monitoring; and `decisions/index.md` remains manually maintained. Evidence IDs and Finding IDs remain unique only within their related Run, no global Evidence registry is introduced, and Run state remains owned by `runs/<run-id>/state.yaml`.
+
+The repository-wide Validator, Generator, generated registries, canonical ownership transfer, and CI enforcement remain future phases. After a future Generator is implemented and a separate canonical ownership transfer is approved and merged, individual Task records may become the canonical owners of Task status while `tasks/backlog.md` becomes a generated view, and `decisions/index.md` may become a generated view.
 
 ## Rationale
 
@@ -65,14 +69,15 @@ A record-first design keeps repository history reviewable by humans while giving
 
 ## Consequences
 
-- This PR documents the target architecture only; it does not switch current canonical ownership.
-- Until Schema, Validator, and Generator are implemented and merged, `tasks/backlog.md` remains the canonical Task status registry and `decisions/index.md` remains manually maintained.
+- This PR implements the `Schema and Front Matter` phase with JSON Schema contracts, applicable YAML front matter, schema contract tests, tested development dependency pins, and related documentation.
+- This PR does not switch current canonical ownership.
+- Until a future canonical ownership transfer is approved and merged, `tasks/backlog.md` remains the canonical Task status registry and `decisions/index.md` remains manually maintained.
 - Individual Task records continue to own approval metadata, implementation history, detailed Validation, rollback details, and monitoring notes.
-- After the future Generator is implemented and merged, individual Task records will own canonical Task status and `tasks/backlog.md` will become a generated view.
-- After the future Generator is implemented and merged, `decisions/index.md` will become a generated view.
-- Future individual Decision and Task files should carry machine-readable YAML front matter before validators enforce it.
+- Evidence IDs and Finding IDs remain Run-local, and no global Evidence registry is introduced.
+- After the future Generator and a separate canonical ownership transfer are implemented and merged, individual Task records may own canonical Task status, `tasks/backlog.md` may become a generated view, and `decisions/index.md` may become a generated view.
+- Future applicable records must use the machine-readable YAML front matter contracts introduced in this phase.
 - No two sources of truth should exist at the same time: each phase must explicitly identify the current canonical owner before generated views are introduced.
-- Validation automation must be introduced incrementally in later architecture or tooling PRs.
+- The repository-wide Validator, Generator, generated registries, ownership transfer, and CI enforcement must be introduced incrementally in later architecture or tooling PRs.
 
 ## Amendment 2026-07-23: Phased Implementation Order
 
@@ -86,8 +91,8 @@ Schema and Front Matter
 → CI enforcement
 ```
 
-Current canonical ownership remains unchanged during this first phase: `tasks/backlog.md` remains the canonical Task status owner, `decisions/index.md` remains manually maintained, Evidence and Finding IDs remain Run-local, and no generated registry is introduced.
+This PR completes the `Schema and Front Matter` phase with JSON Schema contracts, applicable YAML front matter, schema contract tests, and tested development dependency pins. Current canonical ownership remains unchanged during this first phase: `tasks/backlog.md` remains the canonical Task status owner, individual Task records retain ownership of approval and lifecycle details, `decisions/index.md` remains manually maintained, Evidence and Finding IDs remain Run-local, and no generated registry or global Evidence registry is introduced. The repository-wide Validator, Generator, canonical ownership transfer, and CI enforcement remain later phases.
 
 ## Limitations
 
-The earlier architecture PR did not create Schema files. This PR creates Schema and front matter contracts only. Repository-wide Validator tooling, Generator tooling, CI enforcement, real Runs, operational Tasks, Production access, and Production changes remain out of scope.
+This PR creates JSON Schema and YAML front matter contracts, schema contract tests, and tested development dependency pins, but those tests are not a repository-wide Validator or CI enforcement mechanism. Repository-wide Validator tooling, Generator tooling, generated registries, canonical ownership transfer, GitHub Actions or CI enforcement, real Run, Task, Evidence, or Finding records, Production access, and Production changes remain out of scope.
