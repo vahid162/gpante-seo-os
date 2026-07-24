@@ -352,6 +352,30 @@ class RepositoryValidatorTest(unittest.TestCase):
         (self.root / "schemas" / "bad.schema.json").write_text('{"$schema": "https://json-schema.org/draft/2020-12/schema", "type": 7}', encoding="utf-8")
         self.assertInvalidContains("JSON Schema check failed")
 
+    def test_unresolved_schema_ref_returns_controlled_error(self):
+        path = self.root / "schemas" / "task.schema.json"
+        schema = json.loads(path.read_text(encoding="utf-8"))
+        schema["properties"]["schema_version"]["$ref"] = "common.schema.json#/$defs/nonexistent_definition"
+        path.write_text(json.dumps(schema), encoding="utf-8")
+
+        result = self.result()
+
+        self.assertIsInstance(result, ValidationResult)
+        self.assertNotEqual(0, result.exit_code)
+        errors = [
+            error
+            for error in result.errors
+            if error.category == "schema"
+            and error.path == "schemas/task.schema.json"
+            and error.field == "$ref"
+            and "Local $ref does not resolve" in error.message
+        ]
+        self.assertEqual(1, len(errors), format_result(result))
+        self.assertFalse(
+            any(error.category == "configuration" for error in result.errors),
+            format_result(result),
+        )
+
     def test_missing_schema_dialect_returns_controlled_error(self):
         path = self.root / "schemas" / "task.schema.json"
         schema = json.loads(path.read_text(encoding="utf-8"))

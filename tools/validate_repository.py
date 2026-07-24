@@ -244,10 +244,13 @@ def _discover_records(result: ValidationResult) -> list[Record]:
 
 
 def _validate_instances(result: ValidationResult, schemas: dict[str, dict[str, Any]], registry: Registry) -> None:
+    schema_error_paths = {error.path for error in result.errors if error.category == "schema"}
     for record in result.records:
         schema = schemas.get(record.schema_name)
         if not schema:
             _add_error(result, "configuration", record.path, f"Schema file is missing: {record.schema_name}.")
+            continue
+        if (Path("schemas") / record.schema_name).as_posix() in schema_error_paths:
             continue
         validator = Draft202012Validator(schema, registry=registry, format_checker=FormatChecker())
         for error in sorted(validator.iter_errors(record.data), key=lambda item: (list(item.absolute_path), item.message)):
