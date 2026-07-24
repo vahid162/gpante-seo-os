@@ -306,6 +306,14 @@ def _semantic_validation(result: ValidationResult) -> None:
             for ev_id in record.data.get("evidence") or []:
                 if ev_id not in evidence.get(record.run_id, {}):
                     _add_error(result, "reference", record.path, "Finding evidence reference must resolve within the same Run.", record.record_id, f"evidence:{ev_id}")
+        if record.record_type == "decision":
+            for task_id in record.data.get("related_tasks") or []:
+                if task_id not in tasks:
+                    _add_error(result, "reference", record.path, "related_task must resolve to a real Task record in this repository.", record.record_id, f"related_tasks:{task_id}")
+        if record.record_type == "task":
+            for decision_id in record.data.get("related_decisions") or []:
+                if decision_id not in decisions:
+                    _add_error(result, "reference", record.path, "related_decision must resolve to a real Decision record in this repository.", record.record_id, f"related_decisions:{decision_id}")
         if record.record_type in {"decision", "task"}:
             related_run = record.data.get("related_run")
             related_findings = record.data.get("related_findings") or []

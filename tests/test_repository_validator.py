@@ -450,6 +450,59 @@ class RepositoryValidatorTest(unittest.TestCase):
         write_front(path, data)
         self.assertInvalidContains("related_findings requires related_run")
 
+    def test_decision_missing_related_task_fails(self):
+        path = self.root / "decisions" / "DEC-2026-001-site-knowledge-canonical-location.md"
+        data = read_front(path)
+        data["related_tasks"] = ["TSK-2026-999"]
+        write_front(path, data)
+
+        result = self.result()
+
+        self.assertNotEqual(0, result.exit_code)
+        errors = [
+            error
+            for error in result.errors
+            if error.category == "reference"
+            and error.path == "decisions/DEC-2026-001-site-knowledge-canonical-location.md"
+            and error.field == "related_tasks:TSK-2026-999"
+        ]
+        self.assertEqual(1, len(errors), format_result(result))
+        self.assertIn("real Task record", errors[0].message)
+
+    def test_task_missing_related_decision_fails(self):
+        path = self.add_task()
+        data = read_front(path)
+        data["related_decisions"] = ["DEC-2026-999"]
+        write_front(path, data)
+
+        result = self.result()
+
+        self.assertNotEqual(0, result.exit_code)
+        errors = [
+            error
+            for error in result.errors
+            if error.category == "reference"
+            and error.path == "tasks/TSK-2026-123-fix-canonical-routing.md"
+            and error.field == "related_decisions:DEC-2026-999"
+        ]
+        self.assertEqual(1, len(errors), format_result(result))
+        self.assertIn("real Decision record", errors[0].message)
+
+    def test_repository_wide_decision_task_relationships_resolve(self):
+        decision_path = self.root / "decisions" / "DEC-2026-001-site-knowledge-canonical-location.md"
+        decision_data = read_front(decision_path)
+        decision_data["related_tasks"] = ["TSK-2026-123"]
+        write_front(decision_path, decision_data)
+
+        task_path = self.add_task()
+        task_data = read_front(task_path)
+        task_data["related_decisions"] = ["DEC-2026-001"]
+        write_front(task_path, task_data)
+
+        result = self.result()
+
+        self.assertEqual(0, result.exit_code, format_result(result))
+
     def test_missing_related_finding_fails(self):
         self.add_run()
         write_front(self.root / "decisions" / "DEC-2026-999-related.md", {
