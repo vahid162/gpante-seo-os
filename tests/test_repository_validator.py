@@ -1,5 +1,4 @@
 import hashlib
-import json
 import shutil
 import subprocess
 import sys
@@ -36,11 +35,17 @@ class RepositoryValidatorTest(unittest.TestCase):
         self.assertNotEqual(0, result.exit_code)
         rendered = format_result(result)
         self.assertIn(fragment, rendered)
+        return result
+
+    def count_records(self, result, record_type):
+        return sum(1 for record in result.records if record.record_type == record_type)
 
     def add_run(self, run_id="2026-07-24-test-run", evidence_id="EV-001", finding_id="FND-001"):
         run = self.root / "runs" / run_id
         (run / "evidence").mkdir(parents=True)
         (run / "findings").mkdir()
+        (run / "evidence" / "README.md").write_text("# Evidence directory\n", encoding="utf-8")
+        (run / "findings" / "README.md").write_text("# Findings directory\n", encoding="utf-8")
         (run / "state.yaml").write_text(yaml.safe_dump({
             "schema_version": 1, "record_type": "run_state", "is_template": False, "run_id": run_id,
             "status": "initialized", "workflow_stage": "intake", "mode": {"audit_only": True, "production_write": False},
@@ -58,6 +63,74 @@ class RepositoryValidatorTest(unittest.TestCase):
             rel = path.relative_to(self.root).as_posix()
             snap[rel] = hashlib.sha256(path.read_bytes()).hexdigest()
         return snap
+
+
+    def test_real_run_evidence_readme_is_ignored(self):
+        self.add_run()
+        result = self.result()
+        self.assertEqual(0, result.exit_code, format_result(result))
+        self.assertEqual(2, self.count_records(result, "evidence"))
+        self.assertNotIn("runs/2026-07-24-test-run/evidence/README.md", [record.relative_path for record in result.records])
+
+    def test_real_run_findings_readme_is_ignored(self):
+        self.add_run()
+        result = self.result()
+        self.assertEqual(0, result.exit_code, format_result(result))
+        self.assertEqual(2, self.count_records(result, "finding"))
+        self.assertNotIn("runs/2026-07-24-test-run/findings/README.md", [record.relative_path for record in result.records])
+
+    def test_missing_project_yaml_fails_as_configuration_error(self):
+        (self.root / "project.yaml").unlink()
+        result = self.assertInvalidContains("project.yaml")
+        self.assertEqual(2, result.exit_code)
+        self.assertTrue(any(error.category == "configuration" and error.path == "project.yaml" for error in result.errors))
+
+    def test_missing_run_template_state_fails_as_configuration_error(self):
+        (self.root / "runs" / "_template" / "state.yaml").unlink()
+        result = self.assertInvalidContains("runs/_template/state.yaml")
+        self.assertEqual(2, result.exit_code)
+        self.assertTrue(any(error.category == "configuration" for error in result.errors))
+
+    def test_missing_canonical_record_template_fails_as_configuration_error(self):
+        (self.root / "tasks" / "task-template.md").unlink()
+        result = self.assertInvalidContains("tasks/task-template.md")
+        self.assertEqual(2, result.exit_code)
+        self.assertTrue(any(error.category == "configuration" for error in result.errors))
+
+    def test_real_run_missing_state_yaml_fails_as_record_error(self):
+        run = self.add_run()
+        (run / "state.yaml").unlink()
+        result = self.assertInvalidContains("Real Run is missing required machine-readable state.yaml")
+        self.assertEqual(1, result.exit_code)
+        self.assertTrue(any(error.category == "record" and error.path == "runs/2026-07-24-test-run/state.yaml" for error in result.errors))
+
+    def test_evidence_related_run_mismatch_fails(self):
+        run = self.add_run("2026-07-24-test-one")
+        p = run / "evidence" / "ev-001.md"
+        p.write_text(p.read_text(encoding="utf-8").replace("related_run: 2026-07-24-test-one", "related_run: 2026-07-25-test-two"), encoding="utf-8")
+        result = self.assertInvalidContains("Expected '2026-07-24-test-one', found '2026-07-25-test-two'")
+        self.assertTrue(any(error.category == "semantic" and error.field == "related_run" for error in result.errors))
+
+    def test_finding_related_run_mismatch_fails(self):
+        run = self.add_run("2026-07-24-test-one")
+        p = run / "findings" / "fnd-001.md"
+        p.write_text(p.read_text(encoding="utf-8").replace("related_run: 2026-07-24-test-one", "related_run: 2026-07-25-test-two"), encoding="utf-8")
+        result = self.assertInvalidContains("Expected '2026-07-24-test-one', found '2026-07-25-test-two'")
+        self.assertTrue(any(error.category == "semantic" and error.field == "related_run" for error in result.errors))
+
+    def test_known_evidence_template_filename_inside_real_run_is_ignored(self):
+        run = self.add_run()
+        (run / "evidence" / "_evidence-template.md").write_text("# Misplaced template name without front matter\n", encoding="utf-8")
+        result = self.result()
+        self.assertEqual(0, result.exit_code, format_result(result))
+        self.assertEqual(2, self.count_records(result, "evidence"))
+
+    def test_known_finding_template_filename_inside_real_run_is_ignored(self):
+        run = self.add_run()
+        (run / "findings" / "_finding-template.md").write_text("# Misplaced template name without front matter\n", encoding="utf-8")
+        result = self.result()
+        self.assertEqual(0, result.exit_code, format_result(result))
+        self.assertEqual(2, self.count_records(result, "finding"))
 
     def test_current_repository_validates(self):
         result = validate_repository(ROOT)

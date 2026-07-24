@@ -15,6 +15,15 @@ from referencing import Registry, Resource
 DRAFT_2020_12 = "https://json-schema.org/draft/2020-12/schema"
 SCHEMA_BY_RECORD_TYPE = {"decision": "decision.schema.json", "task": "task.schema.json", "evidence": "evidence.schema.json", "finding": "finding.schema.json"}
 ID_FIELD_BY_TYPE = {"decision": "decision_id", "task": "task_id", "evidence": "evidence_id", "finding": "finding_id", "run_state": "run_id", "project": None}
+REQUIRED_REPOSITORY_RECORDS = {
+    Path("project.yaml"): "project.schema.json",
+    Path("runs/_template/state.yaml"): "run-state.schema.json",
+    Path("decisions/decision-template.md"): "decision.schema.json",
+    Path("tasks/task-template.md"): "task.schema.json",
+    Path("runs/_template/evidence/_evidence-template.md"): "evidence.schema.json",
+    Path("runs/_template/findings/_finding-template.md"): "finding.schema.json",
+}
+IGNORED_REAL_RUN_MARKDOWN = {"README.md", "_evidence-template.md", "_finding-template.md"}
 
 @dataclass(frozen=True)
 class ValidationErrorItem:
@@ -100,19 +109,33 @@ def _record_from_data(result: ValidationResult, path: Path, data: dict[str, Any]
     record_type = str(data.get("record_type", "project" if path.name == "project.yaml" else "")); id_field = ID_FIELD_BY_TYPE.get(record_type); record_id = str(data.get(id_field, "")) if id_field else ""
     return Record(path, _rel(result.root, path), data, record_type, schema_name, bool(data.get("is_template", False)), run_id, record_id)
 
+def _real_run_markdown_records(directory: Path) -> list[Path]:
+    if not directory.exists():
+        return []
+    return sorted(path for path in directory.glob("*.md") if path.name not in IGNORED_REAL_RUN_MARKDOWN)
+
 def _discover_records(result: ValidationResult) -> list[Record]:
-    root = result.root; candidates: list[tuple[Path, str, str | None]] = [(root / "project.yaml", "project.schema.json", None), (root / "runs/_template/state.yaml", "run-state.schema.json", None)]
-    candidates += [(p, "decision.schema.json", None) for p in sorted((root / "decisions").glob("DEC-*.md"))]; candidates.append((root / "decisions/decision-template.md", "decision.schema.json", None))
-    candidates += [(p, "task.schema.json", None) for p in sorted((root / "tasks").glob("TSK-*.md"))]; candidates.append((root / "tasks/task-template.md", "task.schema.json", None))
+    root = result.root
+    candidates: list[tuple[Path, str, str | None]] = []
+    for relative_path, schema_name in sorted(REQUIRED_REPOSITORY_RECORDS.items(), key=lambda item: item[0].as_posix()):
+        path = root / relative_path
+        if path.exists():
+            candidates.append((path, schema_name, None))
+        else:
+            _add_error(result, "configuration", path, "Required machine-readable repository file is missing.")
+    candidates += [(p, "decision.schema.json", None) for p in sorted((root / "decisions").glob("DEC-*.md"))]
+    candidates += [(p, "task.schema.json", None) for p in sorted((root / "tasks").glob("TSK-*.md"))]
     if (root / "runs").exists():
         for run_dir in sorted(p for p in (root / "runs").iterdir() if p.is_dir() and p.name != "_template"):
-            candidates.append((run_dir / "state.yaml", "run-state.schema.json", run_dir.name))
-            if (run_dir / "evidence").exists(): candidates += [(p, "evidence.schema.json", run_dir.name) for p in sorted((run_dir / "evidence").glob("*.md"))]
-            if (run_dir / "findings").exists(): candidates += [(p, "finding.schema.json", run_dir.name) for p in sorted((run_dir / "findings").glob("*.md"))]
-    candidates += [(root / "runs/_template/evidence/_evidence-template.md", "evidence.schema.json", None), (root / "runs/_template/findings/_finding-template.md", "finding.schema.json", None)]
+            state_path = run_dir / "state.yaml"
+            if state_path.exists():
+                candidates.append((state_path, "run-state.schema.json", run_dir.name))
+            else:
+                _add_error(result, "record", state_path, "Real Run is missing required machine-readable state.yaml.")
+            candidates += [(p, "evidence.schema.json", run_dir.name) for p in _real_run_markdown_records(run_dir / "evidence")]
+            candidates += [(p, "finding.schema.json", run_dir.name) for p in _real_run_markdown_records(run_dir / "findings")]
     records: list[Record] = []
     for path, schema_name, run_id in sorted(candidates, key=lambda item: _rel(root, item[0])):
-        if not path.exists(): continue
         data = _load_yaml_file(result, path) if path.suffix in {".yaml", ".yml"} else _load_front_matter(result, path)
         if data is None: continue
         if path.suffix == ".md":
@@ -144,6 +167,8 @@ def _semantic_validation(result: ValidationResult) -> None:
         elif r.relative_path == "runs/_template/state.yaml" and r.data.get("is_template") is not True:
             _add_error(result, "semantic", r.path, "Run state template must set is_template to true.", r.record_id, "is_template")
         if r.is_template: continue
+        if r.record_type in {"evidence", "finding"} and r.run_id and r.data.get("related_run") != r.run_id:
+            _add_error(result, "semantic", r.path, f"related_run must match containing Run directory. Expected {r.run_id!r}, found {r.data.get('related_run')!r}.", r.record_id, "related_run")
         if r.record_type == "decision" and r.record_id: _unique(result, decisions, r, "Decision ID must be repository-unique.")
         if r.record_type == "task" and r.record_id: _unique(result, tasks, r, "Task ID must be repository-unique.")
         if r.record_type == "evidence" and r.run_id and r.record_id: _unique(result, evidence.setdefault(r.run_id, {}), r, "Evidence ID must be unique within its Run.")
