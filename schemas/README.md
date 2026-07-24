@@ -31,3 +31,23 @@ is_template: true|false
 ```
 
 Placeholders such as `DEC-YYYY-NNN`, `TSK-YYYY-NNN`, `EV-NNN`, `FND-NNN`, `YYYY-MM-DD-short-slug`, and `OWNER_REQUIRED` are allowed only when `is_template: true`.
+
+## Repository Validator MVP
+
+`tools/validate_repository.py` is the current read-only Repository Validator MVP for the machine-readable contracts in this directory. It checks that schemas parse as JSON Schema Draft 2020-12, validates explicitly discovered records against the schema selected by path or `record_type`, verifies scoped identifier uniqueness, and resolves the currently supported Run-local and cross-record references.
+
+Run it locally from the repository root with:
+
+```powershell
+.venv\Scripts\python.exe tools/validate_repository.py
+```
+
+Exit codes are:
+
+- `0` — the repository is valid for the MVP checks.
+- `1` — validation failures were found and reported in deterministic order.
+- `2` — a configuration or unexpected error prevented normal validation.
+
+The Validator is read-only: it does not create, rewrite, format, cache, or generate repository files. It is not a Generator, CI enforcement, Markdown link checker, anchor checker, secret scanner, repository hygiene scanner, or Production integration. Passing validation confirms only the current machine-readable repository contracts; it does not prove SEO quality, recommendation accuracy, business impact, or authorization to access or change Production systems.
+
+Deferred scopes remain Generator implementation, generated registries, canonical ownership transfer, CI enforcement, link and anchor validation, secret scanning, broader repository hygiene scanning, and any WordPress, WooCommerce, Yoast, server, analytics, Search Console, or Production connection.
